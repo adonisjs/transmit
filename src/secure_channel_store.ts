@@ -1,3 +1,4 @@
+// @ts-ignore
 import matchit from '@poppinss/matchit'
 
 export class SecureChannelStore {
