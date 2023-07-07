@@ -1,0 +1,100 @@
+{
+  "name": "@adonisjs/transmit",
+  "version": "0.0.1",
+  "description": "Server-Sent-Event module for AdonisJS.",
+  "keywords": [
+    "sse",
+    "server-sent-event",
+    "adonis",
+    "adonisjs",
+    "adonis-framework"
+  ],
+  "license": "MIT",
+  "author": "Romain Lanz <romain.lanz@pm.me>",
+  "type": "module",
+  "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./providers": "./build/providers/transmit_provider.js",
+    "./services/transmit": "./build/src/services/transmit.js",
+    "./types": "./build/src/types.js"
+  },
+  "scripts": {
+    "clean": "del-cli build",
+    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
+    "typecheck": "tsc --no-emit",
+    "lint": "eslint . --ext=.ts",
+    "format": "prettier --write .",
+    "quick:test": "node --enable-source-maps --loader=ts-node/esm bin/test.ts",
+    "pretest": "npm run lint",
+    "test": "c8 npm run quick:test",
+    "prebuild": "npm run lint && npm run clean",
+    "build": "tsc",
+    "postbuild": "npm run copy:templates",
+    "release": "np",
+    "version": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@poppinss/matchit": "^3.1.2",
+    "emittery": "^1.0.1"
+  },
+  "devDependencies": {
+    "@adonisjs/core": "^6.1.5-5",
+    "@adonisjs/eslint-config": "^1.1.7",
+    "@adonisjs/prettier-config": "^1.1.7",
+    "@adonisjs/tsconfig": "^1.1.7",
+    "@japa/assert": "2.0.0-1",
+    "@japa/runner": "3.0.0-3",
+    "@swc/core": "^1.3.68",
+    "@types/node": "^20.3.3",
+    "c8": "^8.0.0",
+    "copyfiles": "^2.4.1",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.44.0",
+    "np": "^8.0.4",
+    "prettier": "^2.8.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "@adonisjs/core": "^6.1.5-5"
+  },
+  "files": [
+    "src",
+    "providers",
+    "index.ts",
+    "build/src",
+    "build/providers",
+    "build/stubs",
+    "build/index.d.ts",
+    "build/index.d.ts.map",
+    "build/index.js"
+  ],
+  "engines": {
+    "node": ">=18.16.0"
+  },
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/package"
+  },
+  "prettier": "@adonisjs/prettier-config",
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  },
+  "np": {
+    "message": "chore(release): %s",
+    "tag": "latest",
+    "branch": "main",
+    "anyBranch": false
+  },
+  "c8": {
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "exclude": [
+      "tests/**"
+    ]
+  }
+}
