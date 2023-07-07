@@ -10,39 +10,38 @@ export default class TransmitProvider {
     })
   }
 
-  boot() {
-    this.app.container.resolving('router', async (router) => {
-      const transmit = await this.app.container.make('transmit')
+  async boot() {
+    const router = await this.app.container.make('router')
+    const transmit = await this.app.container.make('transmit')
 
-      router.get('__transmit/events', ({ request, response }) => {
-        transmit.createStream(request, response)
-      })
+    router.get('__transmit/events', ({ request, response }) => {
+      transmit.createStream(request, response)
+    })
 
-      router.post('__transmit/subscribe', (ctx) => {
-        const uid = ctx.request.input('uid')
-        const channel = ctx.request.input('channel')
+    router.post('__transmit/subscribe', (ctx) => {
+      const uid = ctx.request.input('uid')
+      const channel = ctx.request.input('channel')
 
-        const success = transmit.subscribeToChannel(uid, channel, ctx)
+      const success = transmit.subscribeToChannel(uid, channel, ctx)
 
-        if (!success) {
-          return ctx.response.badRequest()
-        }
+      if (!success) {
+        return ctx.response.badRequest()
+      }
 
-        return ctx.response.noContent()
-      })
+      return ctx.response.noContent()
+    })
 
-      router.post('__transmit/unsubscribe', ({ request, response }) => {
-        const uid = request.input('uid')
-        const channel = request.input('channel')
+    router.post('__transmit/unsubscribe', ({ request, response }) => {
+      const uid = request.input('uid')
+      const channel = request.input('channel')
 
-        const success = transmit.unsubscribeFromChannel(uid, channel)
+      const success = transmit.unsubscribeFromChannel(uid, channel)
 
-        if (!success) {
-          return response.badRequest()
-        }
+      if (!success) {
+        return response.badRequest()
+      }
 
-        return response.noContent()
-      })
+      return response.noContent()
     })
   }
 }

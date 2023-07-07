@@ -1,6 +1,6 @@
 {
   "name": "@adonisjs/transmit",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A Server-Sent-Event module for AdonisJS.",
   "keywords": [
     "sse",
@@ -15,8 +15,8 @@
   "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./providers": "./build/providers/transmit_provider.js",
-    "./services/transmit": "./build/src/services/transmit.js",
+    "./providers/transmit_provider": "./build/providers/transmit_provider.js",
+    "./services/transmit": "./build/services/transmit.js",
     "./types": "./build/src/types.js"
   },
   "scripts": {
@@ -66,7 +66,7 @@
     "index.ts",
     "build/src",
     "build/providers",
-    "build/stubs",
+    "build/services",
     "build/index.d.ts",
     "build/index.d.ts.map",
     "build/index.js"
