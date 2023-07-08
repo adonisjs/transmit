@@ -41,7 +41,12 @@ Here are a few things you should know before using this module.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of Contents
 
-- [Installation](#installation)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Channels](#channels)
+    - [Channel Names](#channel-names)
+    - [Channel Authorization](#channel-authorization)
+- [Events](#events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
