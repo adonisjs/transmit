@@ -1,3 +1,12 @@
+/*
+ * @adonisjs/transmit
+ *
+ * (c) AdonisJS
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 import { Transmit } from '../src/transmit.js'
 import type { ApplicationService } from '@adonisjs/core/types'
 

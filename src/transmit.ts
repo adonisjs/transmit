@@ -1,3 +1,12 @@
+/*
+ * @adonisjs/transmit
+ *
+ * (c) AdonisJS
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 import Emittery from 'emittery'
 import { Stream } from './stream.js'
 import { StorageBag } from './storage_bag.js'

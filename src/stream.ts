@@ -1,3 +1,12 @@
+/*
+ * @adonisjs/transmit
+ *
+ * (c) AdonisJS
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 import { Transform } from 'node:stream'
 import type { IncomingMessage, OutgoingHttpHeaders } from 'node:http'
 
