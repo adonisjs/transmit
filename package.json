@@ -64,12 +64,16 @@
     "src",
     "providers",
     "index.ts",
+    "configure.ts",
     "build/src",
     "build/providers",
     "build/services",
     "build/index.d.ts",
     "build/index.d.ts.map",
-    "build/index.js"
+    "build/index.js",
+    "build/configure.d.ts",
+    "build/configure.d.ts.map",
+    "build/configure.js"
   ],
   "engines": {
     "node": ">=18.16.0"
