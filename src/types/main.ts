@@ -14,5 +14,5 @@ export interface Transport {
 }
 
 export interface TransmitConfig {
-  transport: false | { driver: Transport; channel?: string }
+  transport: false | { driver: new (...args: any[]) => Transport; channel?: string }
 }
