@@ -8,14 +8,30 @@
  */
 
 import { Transmit } from '../src/transmit.js'
+import { RedisTransport } from '../src/transports/redis_transport.js'
 import type { ApplicationService } from '@adonisjs/core/types'
+import type { TransmitConfig, Transport } from '../src/types/main.js'
 
 export default class TransmitProvider {
   constructor(protected app: ApplicationService) {}
 
   register() {
-    this.app.container.singleton('transmit', () => {
-      return new Transmit()
+    this.app.container.singleton(RedisTransport, async () => {
+      const redis = await this.app.container.make('redis')
+
+      return new RedisTransport(redis)
+    })
+
+    this.app.container.singleton('transmit', async () => {
+      const config = this.app.config.get<TransmitConfig>('transmit', {})
+
+      let transport: Transport | null = null
+
+      if (config.transport) {
+        transport = await this.app.container.make(config.transport.driver)
+      }
+
+      return new Transmit(config, transport)
     })
   }
 

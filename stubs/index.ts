@@ -7,10 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import type { Transmit } from './transmit.js'
+import { getDirname } from '@poppinss/utils'
 
-declare module '@adonisjs/core/types' {
-  export interface ContainerBindings {
-    transmit: Transmit
-  }
-}
+export const stubsRoot = getDirname(import.meta.url)

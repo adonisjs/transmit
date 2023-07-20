@@ -27,7 +27,7 @@
 
 <hr />
 
-AdonisJS Transmit is a native Server-Sent-Event (SSE) module for AdonisJS. It is built on top of the [EventSource](https://developer.mozilla.org/en-US/docs/Web/API/ntSource) API and provides a simple API to send events to the client. It also supports [Redis](https://redis.io/) as a Transport Layer for broadcasting events to multiple servers or instances.
+AdonisJS Transmit is a native Server-Sent-Event (SSE) module for AdonisJS. It provides a simple API to send events to the client. It also supports [Redis](https://redis.io/) as a Transport Layer for broadcasting events to multiple servers or instances.
 
 Here are a few things you should know before using this module.
 
@@ -39,17 +39,17 @@ Here are a few things you should know before using this module.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 ## Table of Contents
 
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Channels](#channels)
-    - [Channel Names](#channel-names)
-    - [Channel Authorization](#channel-authorization)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Channels](#channels)
+  - [Channel Names](#channel-names)
+  - [Channel Authorization](#channel-authorization)
 - [Events](#events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 ## Installation
 
@@ -57,12 +57,6 @@ Install the package from the npm registry as follows:
 
 ```sh
 npm i @adonisjs/transmit
-
-# yarn
-yarn add @adonisjs/transmit
-
-# pnpm
-pnpm add @adonisjs/transmit
 ```
 
 ## Usage
@@ -70,7 +64,7 @@ pnpm add @adonisjs/transmit
 The module exposes a `transmit` instance, which can be used to send events to the client.
 
 ```ts
-import transmit from '@adonisjs/transmit/services/transmit'
+import transmit from '@adonisjs/transmit/services/main'
 
 // Anywhere in your code
 transmit.broadcast('channelName', { username: 'lanz' })
@@ -95,7 +89,7 @@ transmit.broadcast('users/1/posts', { username: 'lanz' })
 You can mark a channel as private and then authorize the client to subscribe to it. The authorization is done using a callback function.
 
 ```ts
-import type { HttpContext } from "@adonisjs/core/http";
+import type { HttpContext } from '@adonisjs/core/http'
 
 transmit.authorizeChannel<{ id: string }>('users/:id', (ctx: HttpContext, { id }) => {
   return ctx.auth.user?.id === +id
@@ -131,16 +125,12 @@ transmit.on('unsubscribe', ({ uid, channel }) => {
 ```
 
 [gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/transmit/test?style=for-the-badge
-[gh-workflow-url]: https://github.com/adonisjs/transmit/actions/workflows/test.yml "Github action"
-
+[gh-workflow-url]: https://github.com/adonisjs/transmit/actions/workflows/test.yml 'Github action'
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
 [typescript-url]: "typescript"
-
 [npm-image]: https://img.shields.io/npm/v/@adonisjs/transmit.svg?style=for-the-badge&logo=npm
 [npm-url]: https://npmjs.org/package/@adonisjs/transmit 'npm'
-
 [license-image]: https://img.shields.io/npm/l/@adonisjs/transmit?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md 'license'
-
 [synk-image]: https://img.shields.io/snyk/vulnerabilities/github/adonisjs/transmit?label=Synk%20Vulnerabilities&style=for-the-badge
-[synk-url]: https://snyk.io/test/github/adonisjs/transmit?targetFile=package.json "synk"
+[synk-url]: https://snyk.io/test/github/adonisjs/transmit?targetFile=package.json 'synk'

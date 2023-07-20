@@ -12,6 +12,7 @@ import { Stream } from './stream.js'
 import { StorageBag } from './storage_bag.js'
 import { SecureChannelStore } from './secure_channel_store.js'
 import type { HttpContext, Request, Response } from '@adonisjs/core/http'
+import type { TransmitConfig, Transport } from './types/main.js'
 
 interface TransmitHooks {
   connect: { uid: string }
@@ -38,11 +39,24 @@ export class Transmit extends Emittery<TransmitHooks> {
   #secureChannelCallbacks: Map<string, (ctx: HttpContext, params?: any) => Promise<boolean>> =
     new Map()
 
-  constructor() {
+  #transport: Transport | null
+
+  #config: TransmitConfig
+
+  constructor(config: TransmitConfig, transport: Transport | null) {
     super()
 
+    this.#config = config
     this.#storage = new StorageBag()
     this.#secureChannelStore = new SecureChannelStore()
+    this.#transport = transport
+
+    // @ts-ignore
+    void this.#transport?.subscribe(this.#config.transport.channel, (message) => {
+      const { channel, payload } = JSON.parse(message)
+
+      void this.broadcast(channel, payload, true)
+    })
   }
 
   /**
@@ -103,11 +117,16 @@ export class Transmit extends Emittery<TransmitHooks> {
     return this.#storage.removeChannelFromStream(uid, channel)
   }
 
-  broadcast(channel: string, payload: Record<string, unknown>) {
+  broadcast(channel: string, payload: Record<string, unknown>, internal = false) {
     const subscribers = this.#storage.findByChannel(channel)
 
     for (const subscriber of subscribers) {
       subscriber.writeMessage({ data: { channel, payload } })
+    }
+
+    if (!internal) {
+      // @ts-ignore
+      void this.#transport?.send(this.#config.transport.channel, { channel, payload })
     }
 
     void this.emit('broadcast', { channel, payload })

@@ -10,10 +10,11 @@
 import type Configure from '@adonisjs/core/commands/configure'
 
 export async function configure(command: Configure) {
-  /**
-   * Add the provider to the RC file
-   */
+  // Publish config file
+  await command.publishStub('config.stub')
+
+  // Add provider to rc file
   await command.updateRcFile((rcFile) => {
-    rcFile.addProvider('@adonisjs/transmit/providers/transmit_provider')
+    rcFile.addProvider('@adonisjs/transmit/transmit_provider')
   })
 }

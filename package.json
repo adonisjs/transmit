@@ -1,65 +1,12 @@
 {
   "name": "@adonisjs/transmit",
-  "version": "0.0.4",
   "description": "A Server-Sent-Event module for AdonisJS.",
-  "keywords": [
-    "sse",
-    "server-sent-event",
-    "adonis",
-    "adonisjs",
-    "adonis-framework"
-  ],
-  "license": "MIT",
-  "author": "Romain Lanz <romain.lanz@pm.me>",
-  "type": "module",
+  "version": "0.0.4",
+  "engines": {
+    "node": ">=18.16.0"
+  },
   "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./providers/transmit_provider": "./build/providers/transmit_provider.js",
-    "./services/transmit": "./build/services/transmit.js",
-    "./types": "./build/src/types.js"
-  },
-  "scripts": {
-    "clean": "del-cli build",
-    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext=.ts",
-    "format": "prettier --write .",
-    "quick:test": "node --enable-source-maps --loader=ts-node/esm bin/test.ts",
-    "pretest": "npm run lint",
-    "test": "c8 npm run quick:test",
-    "prebuild": "npm run lint && npm run clean",
-    "build": "tsc",
-    "postbuild": "npm run copy:templates",
-    "release": "np",
-    "version": "npm run build",
-    "prepublishOnly": "npm run build"
-  },
-  "dependencies": {
-    "@poppinss/matchit": "^3.1.2",
-    "emittery": "^1.0.1"
-  },
-  "devDependencies": {
-    "@adonisjs/core": "^6.1.5-5",
-    "@adonisjs/eslint-config": "^1.1.7",
-    "@adonisjs/prettier-config": "^1.1.7",
-    "@adonisjs/tsconfig": "^1.1.7",
-    "@japa/assert": "2.0.0-1",
-    "@japa/runner": "3.0.0-3",
-    "@swc/core": "^1.3.68",
-    "@types/node": "^20.3.3",
-    "c8": "^8.0.0",
-    "copyfiles": "^2.4.1",
-    "del-cli": "^5.0.0",
-    "eslint": "^8.44.0",
-    "np": "^8.0.4",
-    "prettier": "^2.8.8",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
-  },
-  "peerDependencies": {
-    "@adonisjs/core": "^6.1.5-5"
-  },
+  "type": "module",
   "files": [
     "src",
     "providers",
@@ -68,6 +15,7 @@
     "build/src",
     "build/providers",
     "build/services",
+    "builld/stubs",
     "build/index.d.ts",
     "build/index.d.ts.map",
     "build/index.js",
@@ -75,9 +23,70 @@
     "build/configure.d.ts.map",
     "build/configure.js"
   ],
-  "engines": {
-    "node": ">=18.16.0"
+  "exports": {
+    ".": "./build/index.js",
+    "./transmit_provider": "./build/providers/transmit_provider.js",
+    "./services/main": "./build/services/transmit.js",
+    "./types": "./build/src/types/main.js"
   },
+  "scripts": {
+    "build": "tsc",
+    "clean": "del-cli build",
+    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "postbuild": "npm run copy:templates",
+    "prebuild": "npm run lint && npm run clean",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run lint",
+    "quick:test": "node --enable-source-maps --loader=ts-node/esm bin/test.ts",
+    "release": "np",
+    "test": "c8 npm run quick:test",
+    "typecheck": "tsc --noEmit",
+    "version": "npm run build"
+  },
+  "devDependencies": {
+    "@adonisjs/core": "^6.1.5-5",
+    "@adonisjs/eslint-config": "^1.1.8",
+    "@adonisjs/prettier-config": "^1.1.8",
+    "@adonisjs/redis": "^8.0.0-1",
+    "@adonisjs/tsconfig": "^1.1.8",
+    "@japa/assert": "2.0.0-1",
+    "@japa/runner": "3.0.0-3",
+    "@swc/core": "^1.3.70",
+    "@types/node": "^20.4.2",
+    "c8": "^8.0.0",
+    "copyfiles": "^2.4.1",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.45.0",
+    "np": "^8.0.4",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@poppinss/matchit": "^3.1.2",
+    "@poppinss/utils": "^6.5.0-3",
+    "emittery": "^1.0.1"
+  },
+  "peerDependencies": {
+    "@adonisjs/core": "^6.1.5-5",
+    "@adonisjs/redis": "^8.0.0-1"
+  },
+  "peerDependenciesMeta": {
+    "@adonisjs/redis": {
+      "optional": true
+    }
+  },
+  "author": "Romain Lanz <romain.lanz@pm.me>",
+  "license": "MIT",
+  "keywords": [
+    "sse",
+    "server-sent-event",
+    "adonis",
+    "adonisjs",
+    "adonis-framework"
+  ],
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/package"
   },
