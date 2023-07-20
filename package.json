@@ -15,7 +15,7 @@
     "build/src",
     "build/providers",
     "build/services",
-    "builld/stubs",
+    "build/stubs",
     "build/index.d.ts",
     "build/index.d.ts.map",
     "build/index.js",
