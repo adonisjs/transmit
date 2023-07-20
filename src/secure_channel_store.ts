@@ -22,7 +22,7 @@ export class SecureChannelStore {
   match(channel: string) {
     const matchedChannel = matchit.match(channel, this.#securedChannelsDefinition)
 
-    if (matchedChannel) {
+    if (matchedChannel.length > 0) {
       const params = matchit.exec(channel, matchedChannel)
       return { params, url: matchedChannel[0].old }
     }
