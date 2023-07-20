@@ -1,7 +1,7 @@
 {
   "name": "@adonisjs/transmit",
   "description": "A Server-Sent-Event module for AdonisJS.",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "engines": {
     "node": ">=18.16.0"
   },
@@ -30,13 +30,14 @@
     "./types": "./build/src/types/main.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run compile",
     "clean": "del-cli build",
-    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
+    "compile": "npm run clean && tsc",
+    "copy:templates": "copyfiles \"stubs/**/**/*.stub\" build",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "postbuild": "npm run copy:templates",
-    "prebuild": "npm run lint && npm run clean",
+    "postcompile": "npm run copy:templates",
+    "precompile": "npm run lint",
     "prepublishOnly": "npm run build",
     "pretest": "npm run lint",
     "quick:test": "node --enable-source-maps --loader=ts-node/esm bin/test.ts",
