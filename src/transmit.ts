@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import { randomUUID } from 'node:crypto'
 import Emittery from 'emittery'
 import { Stream } from './stream.js'
 import { StorageBag } from './storage_bag.js'
@@ -23,6 +24,11 @@ interface TransmitHooks {
 }
 
 export class Transmit extends Emittery<TransmitHooks> {
+  /**
+   * The unique id for the transmit instance.
+   */
+  #id: string
+
   /**
    * The storage bag instance to store all the streams.
    */
@@ -46,6 +52,7 @@ export class Transmit extends Emittery<TransmitHooks> {
   constructor(config: TransmitConfig, transport: Transport | null) {
     super()
 
+    this.#id = randomUUID()
     this.#config = config
     this.#storage = new StorageBag()
     this.#secureChannelStore = new SecureChannelStore()
@@ -53,9 +60,9 @@ export class Transmit extends Emittery<TransmitHooks> {
 
     // @ts-ignore
     void this.#transport?.subscribe(this.#config.transport.channel, (message) => {
-      const { channel, payload } = JSON.parse(message)
+      const { channel, payload, from } = JSON.parse(message)
 
-      void this.broadcast(channel, payload, true)
+      void this.broadcast(channel, payload, true, from)
     })
   }
 
@@ -117,7 +124,11 @@ export class Transmit extends Emittery<TransmitHooks> {
     return this.#storage.removeChannelFromStream(uid, channel)
   }
 
-  broadcast(channel: string, payload: Record<string, unknown>, internal = false) {
+  broadcast(channel: string, payload: Record<string, unknown>, internal = false, from?: string) {
+    if (from === this.#id) {
+      return
+    }
+
     const subscribers = this.#storage.findByChannel(channel)
 
     for (const subscriber of subscribers) {
@@ -126,7 +137,11 @@ export class Transmit extends Emittery<TransmitHooks> {
 
     if (!internal) {
       // @ts-ignore
-      void this.#transport?.send(this.#config.transport.channel, { channel, payload })
+      void this.#transport?.send(this.#config.transport.channel, {
+        channel,
+        payload,
+        from: this.#id,
+      })
     }
 
     void this.emit('broadcast', { channel, payload })
