@@ -106,9 +106,15 @@ export class Transmit extends Emittery<TransmitHooks> {
         return false
       }
 
-      const result = await callback(ctx, definitions.params)
+      try {
+        const result = await callback(ctx, definitions.params)
 
-      if (!result) {
+        if (!result) {
+          ctx.response.forbidden()
+          return false
+        }
+      } catch (e) {
+        ctx.response.internalServerError()
         return false
       }
     }
