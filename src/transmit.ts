@@ -96,6 +96,15 @@ export class Transmit extends Emittery<TransmitHooks> {
     this.#secureChannelCallbacks.set(channel, callback)
   }
 
+  getClients() {
+    return Array.from(this.#storage.getAllSubscribers()).map(([stream]) => stream.getUid())
+  }
+
+  getSubscriptionsForClient(uid: string) {
+    const channels = this.#storage.getChannelByClient(uid)
+    return channels ? Array.from(channels) : []
+  }
+
   async subscribeToChannel(uid: string, channel: string, ctx: HttpContext): Promise<boolean> {
     const definitions = this.#secureChannelStore.match(channel)
 
