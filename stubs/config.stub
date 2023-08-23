@@ -5,5 +5,5 @@ to: {{ app.configPath('transmit.ts') }}
 import { defineConfig } from '@adonisjs/transmit'
 
 export default defineConfig({
-  transport: false
+  transport: null
 })
