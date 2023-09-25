@@ -21,11 +21,11 @@ export class RedisTransport implements Transport {
     await this.#client.publish(channel, JSON.stringify(payload))
   }
 
-  subscribe(channel: string, handler: PubSubChannelHandler): Promise<void> {
-    return Promise.resolve(this.#client.subscribe(channel, handler))
+  async subscribe(channel: string, handler: PubSubChannelHandler): Promise<void> {
+    return this.#client.subscribe(channel, handler)
   }
 
   unsubscribe(channel: string): Promise<void> {
-    return Promise.resolve(this.#client.unsubscribe(channel))
+    return this.#client.unsubscribe(channel) as Promise<void>
   }
 }
