@@ -15,7 +15,7 @@ import { SecureChannelStore } from './secure_channel_store.js'
 import type { HttpContext, Request, Response } from '@adonisjs/core/http'
 import type { TransmitConfig, Transport } from './types/main.js'
 
-interface TransmitHooks {
+interface TransmitLifecycleHooks {
   connect: { uid: string }
   disconnect: { uid: string }
   broadcast: { channel: string; payload: Record<string, unknown> }
@@ -23,7 +23,7 @@ interface TransmitHooks {
   unsubscribe: { uid: string; channel: string }
 }
 
-export class Transmit extends Emittery<TransmitHooks> {
+export class Transmit extends Emittery<TransmitLifecycleHooks> {
   /**
    * The unique id for the transmit instance.
    */
