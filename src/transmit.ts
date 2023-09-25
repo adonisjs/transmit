@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import { randomUUID } from 'node:crypto'
 import Emittery from 'emittery'
 import { Stream } from './stream.js'
 import { StorageBag } from './storage_bag.js'
@@ -25,11 +24,6 @@ interface TransmitLifecycleHooks {
 
 export class Transmit extends Emittery<TransmitLifecycleHooks> {
   /**
-   * The unique id for the transmit instance.
-   */
-  #id: string
-
-  /**
    * The storage bag instance to store all the streams.
    */
   #storage: StorageBag
@@ -45,14 +39,20 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
   #secureChannelCallbacks: Map<string, (ctx: HttpContext, params?: any) => Promise<boolean>> =
     new Map()
 
+  /**
+   * The transport provider to synchronize messages and subscriptions
+   * across multiple instance.
+   */
   #transport: Transport | null
 
+  /**
+   * The config for the transmit instance.
+   */
   #config: TransmitConfig
 
   constructor(config: TransmitConfig, transport: Transport | null) {
     super()
 
-    this.#id = randomUUID()
     this.#config = config
     this.#storage = new StorageBag()
     this.#secureChannelStore = new SecureChannelStore()
@@ -60,9 +60,9 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
 
     // @ts-ignore
     void this.#transport?.subscribe(this.#config.transport.channel, (message) => {
-      const { channel, payload, from } = JSON.parse(message)
+      const { channel, payload } = JSON.parse(message)
 
-      void this.broadcast(channel, payload, true, from)
+      void this.#broadcastLocally(channel, payload)
     })
   }
 
@@ -139,25 +139,38 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
     return this.#storage.removeChannelFromStream(uid, channel)
   }
 
-  broadcast(channel: string, payload: Record<string, unknown>, internal = false, from?: string) {
-    if (from === this.#id) {
-      return
-    }
-
+  #broadcastLocally(
+    channel: string,
+    payload: Record<string, unknown>,
+    senderUid?: string | string[]
+  ) {
     const subscribers = this.#storage.findByChannel(channel)
 
     for (const subscriber of subscribers) {
+      if (
+        Array.isArray(senderUid)
+          ? senderUid.includes(subscriber.getUid())
+          : senderUid === subscriber.getUid()
+      ) {
+        continue
+      }
+
       subscriber.writeMessage({ data: { channel, payload } })
     }
+  }
 
-    if (!internal) {
-      // @ts-ignore
-      void this.#transport?.send(this.#config.transport.channel, {
-        channel,
-        payload,
-        from: this.#id,
-      })
-    }
+  broadcastExcept(channel: string, payload: Record<string, unknown>, senderUid: string | string[]) {
+    return this.#broadcastLocally(channel, payload, senderUid)
+  }
+
+  broadcast(channel: string, payload: Record<string, unknown>) {
+    this.#broadcastLocally(channel, payload)
+
+    // @ts-ignore
+    void this.#transport?.send(this.#config.transport.channel, {
+      channel,
+      payload,
+    })
 
     void this.emit('broadcast', { channel, payload })
   }
