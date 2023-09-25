@@ -69,7 +69,7 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
   /**
    * Creates and register a new stream for the given request and pipes it to the response.
    */
-  createStream(request: Request, response: Response): void {
+  $createStream(request: Request, response: Response): void {
     const stream = new Stream(request.input('uid'), request.request)
     stream.pipe(response.response)
 

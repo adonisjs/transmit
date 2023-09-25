@@ -40,7 +40,7 @@ export default class TransmitProvider {
     const transmit = await this.app.container.make('transmit')
 
     router.get('__transmit/events', ({ request, response }) => {
-      transmit.createStream(request, response)
+      transmit.$createStream(request, response)
     })
 
     router.post('__transmit/subscribe', (ctx) => {
