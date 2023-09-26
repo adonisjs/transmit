@@ -47,7 +47,7 @@ export default class TransmitProvider {
       const uid = ctx.request.input('uid')
       const channel = ctx.request.input('channel')
 
-      const success = transmit.subscribeToChannel(uid, channel, ctx)
+      const success = transmit.$subscribeToChannel(uid, channel, ctx)
 
       if (!success) {
         return ctx.response.badRequest()
@@ -60,7 +60,7 @@ export default class TransmitProvider {
       const uid = request.input('uid')
       const channel = request.input('channel')
 
-      const success = transmit.unsubscribeFromChannel(uid, channel)
+      const success = transmit.$unsubscribeFromChannel(uid, channel)
 
       if (!success) {
         return response.badRequest()

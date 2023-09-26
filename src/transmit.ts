@@ -105,7 +105,7 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
     return channels ? Array.from(channels) : []
   }
 
-  async subscribeToChannel(uid: string, channel: string, ctx: HttpContext): Promise<boolean> {
+  async $subscribeToChannel(uid: string, channel: string, ctx: HttpContext): Promise<boolean> {
     const definitions = this.#secureChannelStore.match(channel)
 
     if (definitions) {
@@ -133,7 +133,7 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
     return this.#storage.addChannelToStream(uid, channel)
   }
 
-  unsubscribeFromChannel(uid: string, channel: string): boolean {
+  $unsubscribeFromChannel(uid: string, channel: string): boolean {
     void this.emit('unsubscribe', { uid, channel })
 
     return this.#storage.removeChannelFromStream(uid, channel)
