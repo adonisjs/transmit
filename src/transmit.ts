@@ -163,7 +163,11 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
     return this.#broadcastLocally(channel, payload, senderUid)
   }
 
-  broadcast(channel: string, payload: Record<string, unknown>) {
+  broadcast(channel: string, payload?: Record<string, unknown>) {
+    if (!payload) {
+      payload = {}
+    }
+
     this.#broadcastLocally(channel, payload)
 
     // @ts-ignore
