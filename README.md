@@ -37,16 +37,17 @@ Here are a few things you should know before using this module.
 👉 <strong>HTTP Protocol:</strong> The underlying protocol used is the regular HTTP, not any special or proprietary protocol.	<br />
 </p>
 
+## Table of Contents
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Channels](#channels)
-  - [Channel Names](#channel-names)
-  - [Channel Authorization](#channel-authorization)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Channels](#channels)
+    - [Channel Names](#channel-names)
+    - [Channel Authorization](#channel-authorization)
+- [Syncing](#syncing)
 - [Events](#events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -97,6 +98,21 @@ transmit.authorizeChannel<{ id: string }>('users/:id', (ctx: HttpContext, { id }
 ```
 
 When a client tries to subscribe to a private channel, the callback function is invoked with the channel params and the HTTP context. The callback function must return a boolean value to allow or disallow the subscription.
+
+# Syncing
+
+Transmit supports syncing events across multiple servers or instances using a transport layer. You can enable syncing by changing the configuration and referencing your driver (only Redis is available as of now).
+
+```ts
+// config/transmit.ts
+import { defineConfig, RedisTransport } from '@adonisjs/transmit'
+
+export default defineConfig({
+  transport: {
+    driver: RedisTransport
+  }
+})
+```
 
 # Events
 
