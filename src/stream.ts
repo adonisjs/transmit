@@ -54,11 +54,15 @@ export class Stream extends Transform {
 
   pipe<T extends HeaderStream>(destination: T, options?: { end?: boolean }): T {
     if (destination.writeHead) {
+      // @see https://github.com/dunglas/mercure/blob/9e080c8dc9a141d4294412d14efdecfb15bf7f43/subscribe.go#L219
       destination.writeHead(200, {
-        'Content-Type': 'text/event-stream; charset=utf-8',
-        'Transfer-Encoding': 'identity',
-        'Cache-Control': 'no-cache',
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate, max-age=0, no-transform',
         'Connection': 'keep-alive',
+        'Content-Type': 'text/event-stream',
+        'Expire': '0',
+        'Pragma': 'no-cache',
+        // @see https://www.nginx.com/resources/wiki/start/topics/examples/x-accel/#x-accel-buffering
+        'X-Accel-Buffering': 'no',
       })
 
       destination.flushHeaders?.()
