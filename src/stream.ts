@@ -36,12 +36,12 @@ export type HeaderStream = NodeJS.WritableStream & WriteHeaders
 export class Stream extends Transform {
   readonly #uid: string
 
-  constructor(uid: string, request: IncomingMessage) {
+  constructor(uid: string, request?: IncomingMessage) {
     super({ objectMode: true })
 
     this.#uid = uid
 
-    if (request.socket) {
+    if (request?.socket) {
       request.socket.setKeepAlive(true)
       request.socket.setNoDelay(true)
       request.socket.setTimeout(0)
