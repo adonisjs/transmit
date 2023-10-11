@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import '../src/types/extended.js'
 import { Transmit } from '../src/transmit.js'
 import { RedisTransport } from '../src/transports/redis_transport.js'
 import type { ApplicationService } from '@adonisjs/core/types'

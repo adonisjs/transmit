@@ -7,8 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import './src/types/extended.js'
-
 export { configure } from './configure.js'
 export { Transmit } from './src/transmit.js'
 export { RedisTransport } from './src/transports/redis_transport.js'
