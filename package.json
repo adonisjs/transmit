@@ -1,6 +1,6 @@
 {
   "name": "@adonisjs/transmit",
-  "description": "A Server-Sent-Event module for AdonisJS.",
+  "description": "A Server-Sent-Event module bringing real-time capabilities to AdonisJS.",
   "version": "0.2.1",
   "engines": {
     "node": ">=18.16.0"
@@ -87,7 +87,9 @@
     "server-sent-event",
     "adonis",
     "adonisjs",
-    "adonis-framework"
+    "adonis-framework",
+    "realtime",
+    "real-time"
   ],
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/package"
