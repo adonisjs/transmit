@@ -94,12 +94,17 @@ transmit.broadcast('users/1/posts', { username: 'lanz' })
 You can mark a channel as private and then authorize the client to subscribe to it. The authorization is done using a callback function.
 
 ```ts
+// start/transmit.ts
+
 import type { HttpContext } from '@adonisjs/core/http'
 
 transmit.authorizeChannel<{ id: string }>('users/:id', (ctx: HttpContext, { id }) => {
   return ctx.auth.user?.id === +id
 })
 ```
+
+> **NOTE**
+> Do not forget to add your `start/transmit.ts` file inside the `preloads` array of the `adonisrc.ts` file.
 
 When a client tries to subscribe to a private channel, the callback function is invoked with the channel params and the HTTP context. The callback function must return a boolean value to allow or disallow the subscription.
 
