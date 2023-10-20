@@ -1,4 +1,2 @@
 build
-docs
-coverage
-*.html
+package.json

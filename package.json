@@ -35,7 +35,7 @@
     "compile": "npm run clean && tsc",
     "copy:templates": "copyfiles \"stubs/**/**/*.stub\" build",
     "format": "prettier --write .",
-    "lint": "eslint .",
+    "lint": "eslint . --ext=.ts",
     "postcompile": "npm run copy:templates",
     "precompile": "npm run lint",
     "prepublishOnly": "npm run build",
@@ -46,34 +46,34 @@
     "typecheck": "tsc --noEmit",
     "version": "npm run build"
   },
+  "dependencies": {
+    "@poppinss/matchit": "^3.1.2",
+    "@poppinss/utils": "^6.5.0",
+    "emittery": "^1.0.1"
+  },
   "devDependencies": {
-    "@adonisjs/assembler": "^6.1.3-22",
-    "@adonisjs/core": "^6.1.5-26",
+    "@adonisjs/assembler": "^6.1.3-25",
+    "@adonisjs/core": "^6.1.5-29",
     "@adonisjs/eslint-config": "^1.1.8",
     "@adonisjs/prettier-config": "^1.1.8",
-    "@adonisjs/redis": "^8.0.0-10",
+    "@adonisjs/redis": "^8.0.0-12",
     "@adonisjs/tsconfig": "^1.1.8",
-    "@japa/assert": "2.0.0-2",
-    "@japa/runner": "3.0.0-9",
-    "@swc/core": "^1.3.82",
-    "@types/node": "^20.7.1",
+    "@japa/assert": "2.0.0",
+    "@japa/runner": "3.0.4",
+    "@swc/core": "1.3.82",
+    "@types/node": "^20.8.7",
     "c8": "^8.0.1",
     "copyfiles": "^2.4.1",
     "del-cli": "^5.1.0",
-    "eslint": "^8.50.0",
+    "eslint": "^8.51.0",
     "np": "^8.0.4",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
-  "dependencies": {
-    "@poppinss/matchit": "^3.1.2",
-    "@poppinss/utils": "^6.5.0-7",
-    "emittery": "^1.0.1"
-  },
   "peerDependencies": {
-    "@adonisjs/core": "^6.1.5-5",
-    "@adonisjs/redis": "^8.0.0-1"
+    "@adonisjs/core": "^6.1.5-29",
+    "@adonisjs/redis": "^8.0.0-12"
   },
   "peerDependenciesMeta": {
     "@adonisjs/redis": {
