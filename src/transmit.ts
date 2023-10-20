@@ -71,7 +71,7 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
    */
   $createStream(request: Request, response: Response): void {
     const stream = new Stream(request.input('uid'), request.request)
-    stream.pipe(response.response)
+    stream.pipe(response.response, undefined, response.getHeaders())
 
     void this.emit('connect', { uid: stream.getUid() })
 

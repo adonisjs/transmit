@@ -52,10 +52,15 @@ export class Stream extends Transform {
     return this.#uid
   }
 
-  pipe<T extends HeaderStream>(destination: T, options?: { end?: boolean }): T {
+  pipe<T extends HeaderStream>(
+    destination: T,
+    options?: { end?: boolean },
+    headers?: Record<string, any>
+  ): T {
     if (destination.writeHead) {
       // @see https://github.com/dunglas/mercure/blob/9e080c8dc9a141d4294412d14efdecfb15bf7f43/subscribe.go#L219
       destination.writeHead(200, {
+        ...headers,
         'Cache-Control': 'private, no-cache, no-store, must-revalidate, max-age=0, no-transform',
         'Connection': 'keep-alive',
         'Content-Type': 'text/event-stream',
