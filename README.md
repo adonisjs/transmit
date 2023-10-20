@@ -60,6 +60,10 @@ Install the package from the npm registry as follows:
 npm i @adonisjs/transmit
 ```
 
+```sh
+node ace configure @adonisjs/transmit
+```
+
 ## Usage
 
 The module exposes a `transmit` instance, which can be used to send events to the client.
