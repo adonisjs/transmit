@@ -22,7 +22,7 @@ test.group('Stream', () => {
     )
   })
 
-  test('sets headers on the response', async ({ assert }) => {
+  test('should sets headers on the response', async ({ assert }) => {
     assert.plan(2)
 
     const stream = new Stream(randomUUID())
@@ -41,5 +41,27 @@ test.group('Stream', () => {
     })
 
     stream.pipe(sink)
+  })
+
+  test('should forward headers to the response', async ({ assert }) => {
+    assert.plan(2)
+
+    const stream = new Stream(randomUUID())
+    const sink = new Sink()
+
+    sink.assertWriteHead((statusCode, headers) => {
+      assert.equal(statusCode, 200)
+      assert.deepEqual(headers, {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate, max-age=0, no-transform',
+        'Connection': 'keep-alive',
+        'Content-Type': 'text/event-stream',
+        'Expire': '0',
+        'Pragma': 'no-cache',
+        'X-Accel-Buffering': 'no',
+        'X-Foo': 'bar',
+      })
+    })
+
+    stream.pipe(sink, undefined, { 'X-Foo': 'bar' })
   })
 })
