@@ -22,7 +22,7 @@ interface TransmitLifecycleHooks {
   unsubscribe: { uid: string; channel: string }
 }
 
-export class Transmit extends Emittery<TransmitLifecycleHooks> {
+export class Transmit {
   /**
    * The storage bag instance to store all the streams.
    */
@@ -50,13 +50,17 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
    */
   #config: TransmitConfig
 
-  constructor(config: TransmitConfig, transport: Transport | null) {
-    super()
+  /**
+   * The emittery instance to emit events.
+   */
+  #emittery: Emittery<TransmitLifecycleHooks>
 
+  constructor(config: TransmitConfig, transport: Transport | null) {
     this.#config = config
     this.#storage = new StorageBag()
     this.#secureChannelStore = new SecureChannelStore()
     this.#transport = transport
+    this.#emittery = new Emittery()
 
     // @ts-ignore
     void this.#transport?.subscribe(this.#config.transport.channel, (message) => {
@@ -73,12 +77,12 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
     const stream = new Stream(request.input('uid'), request.request)
     stream.pipe(response.response, undefined, response.getHeaders())
 
-    void this.emit('connect', { uid: stream.getUid() })
+    void this.#emittery.emit('connect', { uid: stream.getUid() })
 
     this.#storage.push(stream)
 
     response.response.on('close', () => {
-      void this.emit('disconnect', { uid: stream.getUid() })
+      void this.#emittery.emit('disconnect', { uid: stream.getUid() })
       this.#storage.remove(stream)
     })
 
@@ -128,13 +132,13 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
       }
     }
 
-    void this.emit('subscribe', { uid, channel })
+    void this.#emittery.emit('subscribe', { uid, channel })
 
     return this.#storage.addChannelToStream(uid, channel)
   }
 
   $unsubscribeFromChannel(uid: string, channel: string): boolean {
-    void this.emit('unsubscribe', { uid, channel })
+    void this.#emittery.emit('unsubscribe', { uid, channel })
 
     return this.#storage.removeChannelFromStream(uid, channel)
   }
@@ -176,6 +180,13 @@ export class Transmit extends Emittery<TransmitLifecycleHooks> {
       payload,
     })
 
-    void this.emit('broadcast', { channel, payload })
+    void this.#emittery.emit('broadcast', { channel, payload })
+  }
+
+  on<T extends keyof TransmitLifecycleHooks>(
+    event: T,
+    callback: (payload: TransmitLifecycleHooks[T]) => void
+  ) {
+    return this.#emittery.on(event, callback)
   }
 }
