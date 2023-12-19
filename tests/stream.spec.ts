@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { test } from '@japa/runner'
 import { Stream } from '../src/stream.js'
-import { Sink } from '../test-helpers/sink.js'
+import { Sink } from '../test_helpers/sink.js'
 
 test.group('Stream', () => {
   test('should write multiple chunks to the stream', async ({ assert }) => {
