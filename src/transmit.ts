@@ -172,13 +172,14 @@ export class Transmit {
       payload = {}
     }
 
-    this.#broadcastLocally(channel, payload)
-
-    // @ts-ignore
-    void this.#transport?.send(this.#config.transport.channel, {
-      channel,
-      payload,
-    })
+    if (this.#transport) {
+      void this.#transport.send(this.#config.transport!.channel!, {
+        channel,
+        payload,
+      })
+    } else {
+      this.#broadcastLocally(channel, payload)
+    }
 
     void this.#emittery.emit('broadcast', { channel, payload })
   }
