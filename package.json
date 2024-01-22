@@ -72,8 +72,8 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@adonisjs/core": "^6.1.5-29",
-    "@adonisjs/redis": "^8.0.0-12"
+    "@adonisjs/core": "^6.2.0",
+    "@adonisjs/redis": "^8.0.0"
   },
   "peerDependenciesMeta": {
     "@adonisjs/redis": {
