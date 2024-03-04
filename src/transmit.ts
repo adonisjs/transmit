@@ -13,12 +13,12 @@ import { Stream } from './stream.js'
 import { StorageBag } from './storage_bag.js'
 import { SecureChannelStore } from './secure_channel_store.js'
 import type { HttpContext } from '@adonisjs/core/http'
-import type { TransmitConfig, Transport } from './types/main.js'
+import type { Broadcastable, TransmitConfig, Transport } from './types/main.js'
 
 interface TransmitLifecycleHooks {
   connect: { uid: string; ctx: HttpContext }
   disconnect: { uid: string; ctx: HttpContext }
-  broadcast: { channel: string; payload: Record<string, unknown> }
+  broadcast: { channel: string; payload: Broadcastable }
   subscribe: { uid: string; channel: string; ctx: HttpContext }
   unsubscribe: { uid: string; channel: string; ctx: HttpContext }
 }
@@ -163,11 +163,7 @@ export class Transmit {
     }
   }
 
-  #broadcastLocally(
-    channel: string,
-    payload: Record<string, unknown>,
-    senderUid?: string | string[]
-  ) {
+  #broadcastLocally(channel: string, payload: Broadcastable, senderUid?: string | string[]) {
     const subscribers = this.#storage.findByChannel(channel)
 
     for (const subscriber of subscribers) {
@@ -183,11 +179,11 @@ export class Transmit {
     }
   }
 
-  broadcastExcept(channel: string, payload: Record<string, unknown>, senderUid: string | string[]) {
+  broadcastExcept(channel: string, payload: Broadcastable, senderUid: string | string[]) {
     return this.#broadcastLocally(channel, payload, senderUid)
   }
 
-  broadcast(channel: string, payload?: Record<string, unknown>) {
+  broadcast(channel: string, payload?: Broadcastable) {
     if (!payload) {
       payload = {}
     }

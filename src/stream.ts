@@ -9,9 +9,17 @@
 
 import { Transform } from 'node:stream'
 import type { IncomingMessage, OutgoingHttpHeaders } from 'node:http'
+import type { Broadcastable } from './types/main.js'
 
-function dataString(data: string | object): string {
-  if (typeof data === 'object') return dataString(JSON.stringify(data))
+function dataToString(data: Broadcastable): string {
+  if (typeof data === 'object') {
+    return dataToString(JSON.stringify(data))
+  }
+
+  if (typeof data === 'number' || typeof data === 'boolean') {
+    return `data: ${data}\n`
+  }
+
   return data
     .split(/\r\n|\r|\n/)
     .map((line) => `data: ${line}\n`)
@@ -19,7 +27,7 @@ function dataString(data: string | object): string {
 }
 
 interface Message {
-  data: string | object
+  data: Broadcastable
   comment?: string
   event?: string
   id?: string
@@ -83,12 +91,28 @@ export class Stream extends Transform {
     _encoding: string,
     callback: (error?: Error | null, data?: any) => void
   ) {
-    if (message.comment) this.push(`: ${message.comment}\n`)
-    if (message.event) this.push(`event: ${message.event}\n`)
-    if (message.id) this.push(`id: ${message.id}\n`)
-    if (message.retry) this.push(`retry: ${message.retry}\n`)
-    if (message.data) this.push(dataString(message.data))
+    if (message.comment) {
+      this.push(`: ${message.comment}\n`)
+    }
+
+    if (message.event) {
+      this.push(`event: ${message.event}\n`)
+    }
+
+    if (message.id) {
+      this.push(`id: ${message.id}\n`)
+    }
+
+    if (message.retry) {
+      this.push(`retry: ${message.retry}\n`)
+    }
+
+    if (message.data) {
+      this.push(dataToString(message.data))
+    }
+
     this.push('\n')
+
     callback()
   }
 

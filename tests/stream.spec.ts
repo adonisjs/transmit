@@ -64,4 +64,44 @@ test.group('Stream', () => {
 
     stream.pipe(sink, undefined, { 'X-Foo': 'bar' })
   })
+
+  test('should correctly send the data when it is an object', async ({ assert }) => {
+    const stream = new Stream(randomUUID())
+    const sink = new Sink()
+    stream.pipe(sink)
+
+    stream.writeMessage({ data: { channel: 'foo', payload: 'bar' } })
+
+    assert.equal(sink.content, [`:ok\n\n`, `data: {"channel":"foo","payload":"bar"}\n\n`].join(''))
+  })
+
+  test('should correctly send the data when it is a number', async ({ assert }) => {
+    const stream = new Stream(randomUUID())
+    const sink = new Sink()
+    stream.pipe(sink)
+
+    stream.writeMessage({ data: 42 })
+
+    assert.equal(sink.content, [`:ok\n\n`, `data: 42\n\n`].join(''))
+  })
+
+  test('should correctly send the data when it is a string', async ({ assert }) => {
+    const stream = new Stream(randomUUID())
+    const sink = new Sink()
+    stream.pipe(sink)
+
+    stream.writeMessage({ data: 'foo' })
+
+    assert.equal(sink.content, [`:ok\n\n`, `data: foo\n\n`].join(''))
+  })
+
+  test('should correctly send the data when it is a boolean', async ({ assert }) => {
+    const stream = new Stream(randomUUID())
+    const sink = new Sink()
+    stream.pipe(sink)
+
+    stream.writeMessage({ data: true })
+
+    assert.equal(sink.content, [`:ok\n\n`, `data: true\n\n`].join(''))
+  })
 })

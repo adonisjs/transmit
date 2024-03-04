@@ -16,6 +16,11 @@
  */
 export type Duration = number | string
 
+/**
+ * A Broadcastable is a value that can be broadcasted to other clients
+ */
+export type Broadcastable = Record<string, unknown> | string | number | boolean | null
+
 export interface Transport {
   send(channel: string, payload: any): Promise<void>
   subscribe(channel: string, handler: any): Promise<void>
