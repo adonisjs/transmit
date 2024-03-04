@@ -40,8 +40,8 @@ export default class TransmitProvider {
     const router = await this.app.container.make('router')
     const transmit = await this.app.container.make('transmit')
 
-    router.get('__transmit/events', ({ request, response }) => {
-      transmit.$createStream(request, response)
+    router.get('__transmit/events', (ctx) => {
+      transmit.$createStream(ctx)
     })
 
     router.post('__transmit/subscribe', (ctx) => {
@@ -57,17 +57,17 @@ export default class TransmitProvider {
       return ctx.response.noContent()
     })
 
-    router.post('__transmit/unsubscribe', ({ request, response }) => {
-      const uid = request.input('uid')
-      const channel = request.input('channel')
+    router.post('__transmit/unsubscribe', (ctx) => {
+      const uid = ctx.request.input('uid')
+      const channel = ctx.request.input('channel')
 
-      const success = transmit.$unsubscribeFromChannel(uid, channel)
+      const success = transmit.$unsubscribeFromChannel(uid, channel, ctx)
 
       if (!success) {
-        return response.badRequest()
+        return ctx.response.badRequest()
       }
 
-      return response.noContent()
+      return ctx.response.noContent()
     })
   }
 }

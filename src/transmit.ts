@@ -11,15 +11,15 @@ import Emittery from 'emittery'
 import { Stream } from './stream.js'
 import { StorageBag } from './storage_bag.js'
 import { SecureChannelStore } from './secure_channel_store.js'
-import type { HttpContext, Request, Response } from '@adonisjs/core/http'
+import type { HttpContext } from '@adonisjs/core/http'
 import type { TransmitConfig, Transport } from './types/main.js'
 
 interface TransmitLifecycleHooks {
-  connect: { uid: string }
-  disconnect: { uid: string }
+  connect: { uid: string; ctx: HttpContext }
+  disconnect: { uid: string; ctx: HttpContext }
   broadcast: { channel: string; payload: Record<string, unknown> }
-  subscribe: { uid: string; channel: string }
-  unsubscribe: { uid: string; channel: string }
+  subscribe: { uid: string; channel: string; ctx: HttpContext }
+  unsubscribe: { uid: string; channel: string; ctx: HttpContext }
 }
 
 export class Transmit {
@@ -73,16 +73,18 @@ export class Transmit {
   /**
    * Creates and register a new stream for the given request and pipes it to the response.
    */
-  $createStream(request: Request, response: Response): void {
+  $createStream(ctx: HttpContext): void {
+    const { request, response } = ctx
+
     const stream = new Stream(request.input('uid'), request.request)
     stream.pipe(response.response, undefined, response.getHeaders())
 
-    void this.#emittery.emit('connect', { uid: stream.getUid() })
+    void this.#emittery.emit('connect', { uid: stream.getUid(), ctx })
 
     this.#storage.push(stream)
 
     response.response.on('close', () => {
-      void this.#emittery.emit('disconnect', { uid: stream.getUid() })
+      void this.#emittery.emit('disconnect', { uid: stream.getUid(), ctx })
       this.#storage.remove(stream)
     })
 
@@ -132,13 +134,13 @@ export class Transmit {
       }
     }
 
-    void this.#emittery.emit('subscribe', { uid, channel })
+    void this.#emittery.emit('subscribe', { uid, channel, ctx })
 
     return this.#storage.addChannelToStream(uid, channel)
   }
 
-  $unsubscribeFromChannel(uid: string, channel: string): boolean {
-    void this.#emittery.emit('unsubscribe', { uid, channel })
+  $unsubscribeFromChannel(uid: string, channel: string, ctx: HttpContext): boolean {
+    void this.#emittery.emit('unsubscribe', { uid, channel, ctx })
 
     return this.#storage.removeChannelFromStream(uid, channel)
   }
