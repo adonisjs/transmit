@@ -68,6 +68,8 @@ export class Transmit {
 
       void this.#broadcastLocally(channel, payload)
     })
+
+    setInterval(() => this.#ping(), 1000 * 60)
   }
 
   /**
@@ -143,6 +145,14 @@ export class Transmit {
     void this.#emittery.emit('unsubscribe', { uid, channel, ctx })
 
     return this.#storage.removeChannelFromStream(uid, channel)
+  }
+
+  #ping() {
+    this.#storage.getAllSubscribers()
+
+    for (const [stream] of this.#storage.getAllSubscribers()) {
+      stream.writeMessage({ data: { channel: '$$transmit/ping', payload: {} } })
+    }
   }
 
   #broadcastLocally(
