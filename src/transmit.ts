@@ -8,6 +8,7 @@
  */
 
 import Emittery from 'emittery'
+import string from '@poppinss/utils/string'
 import { Stream } from './stream.js'
 import { StorageBag } from './storage_bag.js'
 import { SecureChannelStore } from './secure_channel_store.js'
@@ -69,7 +70,14 @@ export class Transmit {
       void this.#broadcastLocally(channel, payload)
     })
 
-    setInterval(() => this.#ping(), 1000 * 60)
+    if (this.#config.pingInterval) {
+      const intervalValue =
+        typeof this.#config.pingInterval === 'number'
+          ? this.#config.pingInterval
+          : string.milliseconds.parse(this.#config.pingInterval)
+
+      setInterval(() => this.#ping(), intervalValue)
+    }
   }
 
   /**
