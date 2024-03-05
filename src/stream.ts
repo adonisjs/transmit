@@ -28,10 +28,6 @@ function dataToString(data: Broadcastable): string {
 
 interface Message {
   data: Broadcastable
-  comment?: string
-  event?: string
-  id?: string
-  retry?: number
 }
 
 interface WriteHeaders {
@@ -91,22 +87,6 @@ export class Stream extends Transform {
     _encoding: string,
     callback: (error?: Error | null, data?: any) => void
   ) {
-    if (message.comment) {
-      this.push(`: ${message.comment}\n`)
-    }
-
-    if (message.event) {
-      this.push(`event: ${message.event}\n`)
-    }
-
-    if (message.id) {
-      this.push(`id: ${message.id}\n`)
-    }
-
-    if (message.retry) {
-      this.push(`retry: ${message.retry}\n`)
-    }
-
     if (message.data) {
       this.push(dataToString(message.data))
     }
