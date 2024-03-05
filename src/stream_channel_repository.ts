@@ -9,7 +9,7 @@
 
 import type { Stream } from './stream.js'
 
-export class StorageBag {
+export class StreamChannelRepository {
   #subscribers = new Map<Stream, Set<string>>()
   #channelByUid = new Map<string, Set<string>>()
 
@@ -62,5 +62,9 @@ export class StorageBag {
 
   getAllSubscribers() {
     return this.#subscribers
+  }
+
+  getChannelCount() {
+    return this.#subscribers.size
   }
 }

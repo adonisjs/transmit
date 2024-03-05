@@ -10,7 +10,7 @@
 import Emittery from 'emittery'
 import string from '@poppinss/utils/string'
 import { Stream } from './stream.js'
-import { StorageBag } from './storage_bag.js'
+import { StreamChannelRepository } from './stream_channel_repository.js'
 import { SecureChannelStore } from './secure_channel_store.js'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { Broadcastable, TransmitConfig, Transport } from './types/main.js'
@@ -27,7 +27,7 @@ export class Transmit {
   /**
    * The storage bag instance to store all the streams.
    */
-  #storage: StorageBag
+  #storage: StreamChannelRepository
 
   /**
    * The secure channel store instance to store all the secure channel definitions.
@@ -58,7 +58,7 @@ export class Transmit {
 
   constructor(config: TransmitConfig, transport: Transport | null) {
     this.#config = config
-    this.#storage = new StorageBag()
+    this.#storage = new StreamChannelRepository()
     this.#secureChannelStore = new SecureChannelStore()
     this.#transport = transport
     this.#emittery = new Emittery()
