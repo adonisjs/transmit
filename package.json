@@ -1,7 +1,7 @@
 {
   "name": "@adonisjs/transmit",
   "description": "A Server-Sent-Event module bringing real-time capabilities to AdonisJS.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "engines": {
     "node": ">=18.16.0"
   },
