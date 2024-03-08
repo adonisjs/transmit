@@ -112,7 +112,8 @@ Transmit supports syncing events across multiple servers or instances using a tr
 ```ts
 // config/transmit.ts
 import env from '#start/env'
-import { defineConfig, redis } from '@adonisjs/transmit'
+import { defineConfig } from '@adonisjs/transmit'
+import { redis } from '@adonisjs/transmit/transports'
 
 export default defineConfig({
   transport: {
@@ -124,6 +125,9 @@ export default defineConfig({
   }
 })
 ```
+
+> [!NOTE]
+> Ensure to have `ioredis` installed when using the `redis` driver.
 
 # Ping
 

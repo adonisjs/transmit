@@ -25,6 +25,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./transports": "./build/transports.js",
     "./transmit_provider": "./build/providers/transmit_provider.js",
     "./services/main": "./build/services/transmit.js",
     "./types": "./build/src/types/main.js"
