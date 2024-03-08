@@ -48,6 +48,7 @@ Here are a few things you should know before using this module.
     - [Channel Names](#channel-names)
     - [Channel Authorization](#channel-authorization)
 - [Syncing](#syncing)
+- [Ping](#ping)
 - [Events](#events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -57,11 +58,7 @@ Here are a few things you should know before using this module.
 Install the package from the npm registry as follows:
 
 ```sh
-npm i @adonisjs/transmit
-```
-
-```sh
-node ace configure @adonisjs/transmit
+node ace add @adonisjs/transmit
 ```
 
 ## Usage
@@ -103,7 +100,7 @@ transmit.authorizeChannel<{ id: string }>('users/:id', (ctx: HttpContext, { id }
 })
 ```
 
-> **NOTE**
+> [!NOTE]
 > Do not forget to add your `start/transmit.ts` file inside the `preloads` array of the `adonisrc.ts` file.
 
 When a client tries to subscribe to a private channel, the callback function is invoked with the channel params and the HTTP context. The callback function must return a boolean value to allow or disallow the subscription.
@@ -114,12 +111,30 @@ Transmit supports syncing events across multiple servers or instances using a tr
 
 ```ts
 // config/transmit.ts
-import { defineConfig, RedisTransport } from '@adonisjs/transmit'
+import env from '#start/env'
+import { defineConfig, redis } from '@adonisjs/transmit'
 
 export default defineConfig({
   transport: {
-    driver: RedisTransport
+    driver: redis({
+      host: env.get('REDIS_HOST'),
+      port: env.get('REDIS_PORT'),
+      password: env.get('REDIS_PASSWORD'),
+    })
   }
+})
+```
+
+# Ping
+
+Transmit supports pinging the client to keep the connection alive. You can enable pinging by changing the configuration.
+
+```ts
+// config/transmit.ts
+import { defineConfig, redis } from '@adonisjs/transmit'
+
+export default defineConfig({
+  pingInterval: '1m',
 })
 ```
 
