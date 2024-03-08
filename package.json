@@ -49,7 +49,7 @@
   "dependencies": {
     "@poppinss/matchit": "^3.1.2",
     "@poppinss/utils": "^6.7.2",
-    "@rlanz/bus": "^0.0.5",
+    "@rlanz/bus": "^0.1.0",
     "emittery": "^1.0.3"
   },
   "devDependencies": {
@@ -61,13 +61,13 @@
     "@adonisjs/tsconfig": "^1.3.0",
     "@japa/assert": "2.1.0",
     "@japa/runner": "3.1.1",
-    "@swc/core": "1.3.105",
+    "@swc/core": "1.4.6",
     "@types/node": "^20.11.25",
     "c8": "^9.1.0",
     "copyfiles": "^2.4.1",
     "del-cli": "^5.1.0",
     "eslint": "^8.57.0",
-    "np": "^9.2.0",
+    "np": "^10.0.0",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
@@ -114,5 +114,8 @@
     "exclude": [
       "tests/**"
     ]
+  },
+  "volta": {
+    "node": "20.11.1"
   }
 }
