@@ -9,27 +9,21 @@
 
 import '../src/types/extended.js'
 import { Transmit } from '../src/transmit.js'
-import { RedisTransport } from '../src/transports/redis_transport.js'
 import type { ApplicationService } from '@adonisjs/core/types'
-import type { TransmitConfig, Transport } from '../src/types/main.js'
+import type { TransmitConfig } from '../src/types/main.js'
+import type { Transport } from '@rlanz/bus/types/main'
 
 export default class TransmitProvider {
   constructor(protected app: ApplicationService) {}
 
   register() {
-    this.app.container.singleton(RedisTransport, async () => {
-      const redis = await this.app.container.make('redis')
-
-      return new RedisTransport(redis)
-    })
-
     this.app.container.singleton('transmit', async () => {
       const config = this.app.config.get<TransmitConfig>('transmit', {})
 
       let transport: Transport | null = null
 
       if (config.transport) {
-        transport = await this.app.container.make(config.transport.driver)
+        transport = config.transport.driver()
       }
 
       return new Transmit(config, transport)
@@ -69,5 +63,11 @@ export default class TransmitProvider {
 
       return ctx.response.noContent()
     })
+  }
+
+  async shutdown() {
+    const transmit = await this.app.container.make('transmit')
+
+    await transmit.closeBusConnection()
   }
 }

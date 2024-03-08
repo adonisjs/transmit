@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+import type { TransportFactory } from '@rlanz/bus/types/main'
+
 /**
  * A Duration can be a number in milliseconds or a string formatted as a duration
  *
@@ -19,15 +21,9 @@ export type Duration = number | string
 /**
  * A Broadcastable is a value that can be broadcasted to other clients
  */
-export type Broadcastable = Record<string, unknown> | string | number | boolean | null
-
-export interface Transport {
-  send: (channel: string, payload: any) => Promise<void>
-  subscribe: (channel: string, handler: any) => Promise<void>
-  unsubscribe: (channel: string) => Promise<void>
-}
+export type Broadcastable = { [key: string]: Broadcastable } | string | number | boolean | null
 
 export interface TransmitConfig {
   pingInterval?: Duration | false
-  transport: null | { driver: new (...args: any[]) => Transport; channel?: string }
+  transport: null | { driver: TransportFactory; channel?: string }
 }

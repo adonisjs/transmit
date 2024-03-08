@@ -8,12 +8,14 @@
  */
 
 import Emittery from 'emittery'
+import { Bus } from '@rlanz/bus'
 import string from '@poppinss/utils/string'
 import { Stream } from './stream.js'
 import { StreamChannelRepository } from './stream_channel_repository.js'
 import { SecureChannelStore } from './secure_channel_store.js'
 import type { HttpContext } from '@adonisjs/core/http'
-import type { Broadcastable, TransmitConfig, Transport } from './types/main.js'
+import type { Transport } from '@rlanz/bus/types/main'
+import type { Broadcastable, TransmitConfig } from './types/main.js'
 
 interface TransmitLifecycleHooks {
   connect: { uid: string; ctx: HttpContext }
@@ -44,7 +46,7 @@ export class Transmit {
    * The transport provider to synchronize messages and subscriptions
    * across multiple instance.
    */
-  #transport: Transport | null
+  readonly #bus: Bus | null
 
   /**
    * The config for the transmit instance.
@@ -60,15 +62,18 @@ export class Transmit {
     this.#config = config
     this.#storage = new StreamChannelRepository()
     this.#secureChannelStore = new SecureChannelStore()
-    this.#transport = transport
+    this.#bus = transport ? new Bus(transport, { retryQueue: { enabled: true } }) : null
     this.#emittery = new Emittery()
 
-    // @ts-ignore
-    void this.#transport?.subscribe(this.#config.transport.channel, (message) => {
-      const { channel, payload } = JSON.parse(message)
+    void this.#bus?.subscribe<{ channel: string; payload: Broadcastable }>(
+      // TODO: Create a computed config type
+      this.#config.transport!.channel!,
+      (message) => {
+        const { channel, payload } = message
 
-      void this.#broadcastLocally(channel, payload)
-    })
+        void this.#broadcastLocally(channel, payload)
+      }
+    )
 
     if (this.#config.pingInterval) {
       const intervalValue =
@@ -188,16 +193,18 @@ export class Transmit {
       payload = {}
     }
 
-    if (this.#transport) {
-      void this.#transport.send(this.#config.transport!.channel!, {
-        channel,
-        payload,
-      })
-    } else {
-      this.#broadcastLocally(channel, payload)
-    }
+    void this.#bus?.publish(this.#config.transport!.channel!, {
+      channel,
+      payload,
+    })
+
+    this.#broadcastLocally(channel, payload)
 
     void this.#emittery.emit('broadcast', { channel, payload })
+  }
+
+  closeBusConnection() {
+    return this.#bus?.disconnect()
   }
 
   on<T extends keyof TransmitLifecycleHooks>(
