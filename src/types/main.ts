@@ -22,9 +22,9 @@ export type Duration = number | string
 export type Broadcastable = Record<string, unknown> | string | number | boolean | null
 
 export interface Transport {
-  send(channel: string, payload: any): Promise<void>
-  subscribe(channel: string, handler: any): Promise<void>
-  unsubscribe(channel: string): Promise<void>
+  send: (channel: string, payload: any) => Promise<void>
+  subscribe: (channel: string, handler: any) => Promise<void>
+  unsubscribe: (channel: string) => Promise<void>
 }
 
 export interface TransmitConfig {
