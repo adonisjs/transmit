@@ -11,6 +11,7 @@
     "src",
     "providers",
     "index.ts",
+    "transports.js",
     "configure.ts",
     "build/src",
     "build/providers",
