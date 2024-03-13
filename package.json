@@ -11,18 +11,8 @@
     "src",
     "providers",
     "index.ts",
-    "transports.js",
     "configure.ts",
-    "build/src",
-    "build/providers",
-    "build/services",
-    "build/stubs",
-    "build/index.d.ts",
-    "build/index.d.ts.map",
-    "build/index.js",
-    "build/configure.d.ts",
-    "build/configure.d.ts.map",
-    "build/configure.js"
+    "build"
   ],
   "exports": {
     ".": "./build/index.js",
