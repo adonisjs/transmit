@@ -3,7 +3,7 @@
   "description": "A Server-Sent-Event module bringing real-time capabilities to AdonisJS.",
   "version": "0.4.2",
   "engines": {
-    "node": ">=18.16.0"
+    "node": ">=20.11.1"
   },
   "main": "build/index.js",
   "type": "module",
