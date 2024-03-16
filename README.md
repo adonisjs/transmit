@@ -7,7 +7,11 @@
 
 <div align="center">
 
-[![gh-workflow-image]][gh-workflow-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url] [![snyk-image]][snyk-url]
+[![typescript-image]][typescript-url]
+[![gh-workflow-image]][gh-workflow-url]
+[![npm-image]][npm-url]
+[![npm-download-image]][npm-download-url]
+[![license-image]][license-url]
 
 </div>
 
@@ -135,7 +139,8 @@ Transmit supports pinging the client to keep the connection alive. You can enabl
 
 ```ts
 // config/transmit.ts
-import { defineConfig, redis } from '@adonisjs/transmit'
+import { defineConfig } from '@adonisjs/transmit'
+import { redis } from '@adonisjs/transmit/transports'
 
 export default defineConfig({
   pingInterval: '1m',
@@ -168,13 +173,13 @@ transmit.on('unsubscribe', ({ uid, channel }) => {
 })
 ```
 
-[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/transmit/test?style=for-the-badge
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/transmit/test.yml?branch=main&style=for-the-badge
 [gh-workflow-url]: https://github.com/adonisjs/transmit/actions/workflows/test.yml 'GitHub action'
-[typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
-[typescript-url]: "typescript"
 [npm-image]: https://img.shields.io/npm/v/@adonisjs/transmit.svg?style=for-the-badge&logo=npm
-[npm-url]: https://npmjs.org/package/@adonisjs/transmit 'npm'
-[license-image]: https://img.shields.io/npm/l/@adonisjs/transmit?color=blueviolet&style=for-the-badge
-[license-url]: LICENSE.md 'license'
-[snyk-image]: https://img.shields.io/snyk/vulnerabilities/github/adonisjs/transmit?label=Snyk%20Vulnerabilities&style=for-the-badge
-[snyk-url]: https://snyk.io/test/github/adonisjs/transmit?targetFile=package.json 'snyk'
+[npm-url]: https://www.npmjs.com/package/@adonisjs/transmit
+[npm-download-image]: https://img.shields.io/npm/dm/@adonisjs/transmit?style=for-the-badge
+[npm-download-url]: https://www.npmjs.com/package/@adonisjs/transmit
+[typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
+[typescript-url]: https://www.typescriptlang.org
+[license-image]: https://img.shields.io/npm/l/@rlanz/bus?color=blueviolet&style=for-the-badge
+[license-url]: LICENSE.md
