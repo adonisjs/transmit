@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import { clearInterval } from 'node:timers'
 import Emittery from 'emittery'
 import { Bus } from '@rlanz/bus'
 import string from '@poppinss/utils/string'
@@ -58,6 +59,11 @@ export class Transmit {
    */
   #emittery: Emittery<TransmitLifecycleHooks>
 
+  /**
+   * The interval to send ping messages to all the subscribers.
+   */
+  readonly #interval: NodeJS.Timeout | undefined
+
   constructor(config: TransmitConfig, transport: Transport | null) {
     this.#config = config
     this.#storage = new StreamChannelRepository()
@@ -81,7 +87,7 @@ export class Transmit {
           ? this.#config.pingInterval
           : string.milliseconds.parse(this.#config.pingInterval)
 
-      setInterval(() => this.#ping(), intervalValue)
+      this.#interval = setInterval(() => this.#ping(), intervalValue)
     }
   }
 
@@ -203,8 +209,12 @@ export class Transmit {
     void this.#emittery.emit('broadcast', { channel, payload })
   }
 
-  closeBusConnection() {
-    return this.#bus?.disconnect()
+  async shutdown() {
+    if (this.#interval) {
+      clearInterval(this.#interval)
+    }
+
+    await this.#bus?.disconnect()
   }
 
   on<T extends keyof TransmitLifecycleHooks>(

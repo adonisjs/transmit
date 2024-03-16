@@ -68,6 +68,6 @@ export default class TransmitProvider {
   async shutdown() {
     const transmit = await this.app.container.make('transmit')
 
-    await transmit.closeBusConnection()
+    await transmit.shutdown()
   }
 }
