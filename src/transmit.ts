@@ -14,6 +14,7 @@ import string from '@poppinss/utils/string'
 import { Stream } from './stream.js'
 import { StreamChannelRepository } from './stream_channel_repository.js'
 import { SecureChannelStore } from './secure_channel_store.js'
+import { TransportMessageType } from './transport_message_type.js'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { Transport } from '@rlanz/bus/types/main'
 import type { Broadcastable, TransmitConfig } from './types/main.js'
@@ -25,6 +26,23 @@ interface TransmitLifecycleHooks {
   subscribe: { uid: string; channel: string; ctx: HttpContext }
   unsubscribe: { uid: string; channel: string; ctx: HttpContext }
 }
+
+type TransmitMessage =
+  | {
+      type: typeof TransportMessageType.Broadcast
+      channel: string
+      payload: Broadcastable
+    }
+  | {
+      type: typeof TransportMessageType.Subscribe
+      channel: string
+      payload: { uid: string }
+    }
+  | {
+      type: typeof TransportMessageType.Unsubscribe
+      channel: string
+      payload: { uid: string }
+    }
 
 export class Transmit {
   /**
@@ -71,13 +89,19 @@ export class Transmit {
     this.#bus = transport ? new Bus(transport, { retryQueue: { enabled: true } }) : null
     this.#emittery = new Emittery()
 
-    void this.#bus?.subscribe<{ channel: string; payload: Broadcastable }>(
+    void this.#bus?.subscribe<TransmitMessage>(
       // TODO: Create a computed config type
       this.#config.transport!.channel!,
       (message) => {
-        const { channel, payload } = message
+        const { type, channel, payload } = message
 
-        void this.#broadcastLocally(channel, payload)
+        if (type === TransportMessageType.Broadcast) {
+          void this.#broadcastLocally(channel, payload)
+        } else if (type === TransportMessageType.Subscribe) {
+          void this.#storage.addChannelToStream(message.payload.uid, message.channel)
+        } else if (type === TransportMessageType.Unsubscribe) {
+          void this.#storage.removeChannelFromStream(message.payload.uid, message.channel)
+        }
       }
     )
 
@@ -157,11 +181,23 @@ export class Transmit {
 
     void this.#emittery.emit('subscribe', { uid, channel, ctx })
 
+    void this.#bus?.publish(this.#config.transport!.channel!, {
+      type: TransportMessageType.Subscribe,
+      channel,
+      payload: { uid },
+    })
+
     return this.#storage.addChannelToStream(uid, channel)
   }
 
   $unsubscribeFromChannel(uid: string, channel: string, ctx: HttpContext): boolean {
     void this.#emittery.emit('unsubscribe', { uid, channel, ctx })
+
+    void this.#bus?.publish(this.#config.transport!.channel!, {
+      type: TransportMessageType.Unsubscribe,
+      channel,
+      payload: { uid },
+    })
 
     return this.#storage.removeChannelFromStream(uid, channel)
   }
@@ -200,6 +236,7 @@ export class Transmit {
     }
 
     void this.#bus?.publish(this.#config.transport!.channel!, {
+      type: TransportMessageType.Broadcast,
       channel,
       payload,
     })
