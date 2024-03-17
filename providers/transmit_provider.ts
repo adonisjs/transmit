@@ -38,11 +38,11 @@ export default class TransmitProvider {
       transmit.$createStream(ctx)
     })
 
-    router.post('__transmit/subscribe', (ctx) => {
+    router.post('__transmit/subscribe', async (ctx) => {
       const uid = ctx.request.input('uid')
       const channel = ctx.request.input('channel')
 
-      const success = transmit.$subscribeToChannel(uid, channel, ctx)
+      const success = await transmit.$subscribeToChannel(uid, channel, ctx)
 
       if (!success) {
         return ctx.response.badRequest()
@@ -51,11 +51,11 @@ export default class TransmitProvider {
       return ctx.response.noContent()
     })
 
-    router.post('__transmit/unsubscribe', (ctx) => {
+    router.post('__transmit/unsubscribe', async (ctx) => {
       const uid = ctx.request.input('uid')
       const channel = ctx.request.input('channel')
 
-      const success = transmit.$unsubscribeFromChannel(uid, channel, ctx)
+      const success = await transmit.$unsubscribeFromChannel(uid, channel, ctx)
 
       if (!success) {
         return ctx.response.badRequest()
