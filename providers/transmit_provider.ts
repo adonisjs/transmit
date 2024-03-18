@@ -51,11 +51,11 @@ export default class TransmitProvider {
       return ctx.response.noContent()
     })
 
-    router.post('__transmit/unsubscribe', async (ctx) => {
+    router.post('__transmit/unsubscribe', (ctx) => {
       const uid = ctx.request.input('uid')
       const channel = ctx.request.input('channel')
 
-      const success = await transmit.$unsubscribeFromChannel(uid, channel, ctx)
+      const success = transmit.$unsubscribeFromChannel(uid, channel, ctx)
 
       if (!success) {
         return ctx.response.badRequest()
