@@ -58,8 +58,10 @@ export class Transmit {
   /**
    * The secure channel store instance to store all the secure channel callbacks.
    */
-  #secureChannelCallbacks: Map<string, (ctx: HttpContext, params?: any) => Promise<boolean>> =
-    new Map()
+  #secureChannelCallbacks: Map<
+    string,
+    (ctx: HttpContext, params?: any) => Promise<boolean> | boolean
+  > = new Map()
 
   /**
    * The transport provider to synchronize messages and subscriptions
