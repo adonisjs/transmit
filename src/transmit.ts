@@ -141,7 +141,7 @@ export class Transmit {
    */
   authorizeChannel<T = undefined>(
     channel: string,
-    callback: (ctx: HttpContext, params: T) => Promise<boolean>
+    callback: (ctx: HttpContext, params: T) => Promise<boolean> | boolean
   ) {
     this.#secureChannelStore.add(channel)
     this.#secureChannelCallbacks.set(channel, callback)
