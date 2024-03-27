@@ -84,7 +84,7 @@ export class Transmit {
    */
   readonly #interval: NodeJS.Timeout | undefined
 
-  constructor(config: TransmitConfig, transport: Transport | null) {
+  constructor(config: TransmitConfig, transport?: Transport | null) {
     this.#config = config
     this.#storage = new StreamChannelRepository()
     this.#secureChannelStore = new SecureChannelStore()
@@ -100,9 +100,9 @@ export class Transmit {
         if (type === TransportMessageType.Broadcast) {
           void this.#broadcastLocally(channel, payload)
         } else if (type === TransportMessageType.Subscribe) {
-          void this.#storage.addChannelToStream(message.payload.uid, message.channel)
+          void this.#storage.addChannelToStream(payload.uid, channel)
         } else if (type === TransportMessageType.Unsubscribe) {
-          void this.#storage.removeChannelFromStream(message.payload.uid, message.channel)
+          void this.#storage.removeChannelFromStream(payload.uid, channel)
         }
       }
     )
@@ -120,8 +120,12 @@ export class Transmit {
   /**
    * Creates and register a new stream for the given request and pipes it to the response.
    */
-  $createStream(ctx: HttpContext): void {
+  $createStream(ctx: HttpContext): Stream {
     const { request, response } = ctx
+
+    if (!request.input('uid')) {
+      throw new Error('Missing required field "uid" in the request body')
+    }
 
     const stream = new Stream(request.input('uid'), request.request)
     stream.pipe(response.response, undefined, response.getHeaders())
@@ -136,6 +140,8 @@ export class Transmit {
     })
 
     response.stream(stream)
+
+    return stream
   }
 
   /**
