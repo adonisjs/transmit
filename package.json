@@ -33,7 +33,7 @@
     "prepublishOnly": "npm run build",
     "pretest": "npm run lint",
     "quick:test": "node --enable-source-maps --loader=ts-node/esm bin/test.ts",
-    "release": "np",
+    "release": "npx release-it",
     "test": "c8 npm run quick:test",
     "typecheck": "tsc --noEmit",
     "version": "npm run build"
@@ -59,8 +59,8 @@
     "copyfiles": "^2.4.1",
     "del-cli": "^5.1.0",
     "eslint": "^8.57.0",
-    "np": "^10.0.2",
     "prettier": "^3.2.5",
+    "release-it": "^17.1.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   },
@@ -92,11 +92,17 @@
     "access": "public",
     "tag": "latest"
   },
-  "np": {
-    "message": "chore(release): %s",
-    "tag": "latest",
-    "branch": "main",
-    "anyBranch": false
+  "release-it": {
+    "git": {
+      "commitMessage": "chore(release): ${version}",
+      "tagAnnotation": "v${version}",
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "releaseName": "v${version}",
+      "web": true
+    }
   },
   "c8": {
     "reporter": [
