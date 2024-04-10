@@ -26,11 +26,11 @@ test.group('Provider', () => {
     assert.equal((router.routes[2] as Route).getPattern(), '__transmit/unsubscribe')
   })
 
-  test('allow to customize the domain of the routes', async ({ assert }) => {
+  test('allow to customize the route registration', async ({ assert }) => {
     const app = await setupApp({
       transmit: {
         transport: null,
-        routeHandlerDomain: 'example.com',
+        routeHandlerModifier: (route) => route.domain('example.com'),
       },
     })
 

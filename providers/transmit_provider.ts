@@ -65,10 +65,10 @@ export default class TransmitProvider {
       return ctx.response.noContent()
     })
 
-    if (config.routeHandlerDomain) {
-      registerRoute.domain(config.routeHandlerDomain)
-      subscribeRoute.domain(config.routeHandlerDomain)
-      unsubscribeRoute.domain(config.routeHandlerDomain)
+    if (config.routeHandlerModifier) {
+      config.routeHandlerModifier(registerRoute)
+      config.routeHandlerModifier(subscribeRoute)
+      config.routeHandlerModifier(unsubscribeRoute)
     }
   }
 

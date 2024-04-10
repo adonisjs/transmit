@@ -8,6 +8,7 @@
  */
 
 import type { TransportFactory } from '@rlanz/bus/types/main'
+import type { Route } from '@adonisjs/core/http'
 
 /**
  * A Duration can be a number in milliseconds or a string formatted as a duration
@@ -26,5 +27,5 @@ export type Broadcastable = { [key: string]: Broadcastable } | string | number |
 export interface TransmitConfig {
   pingInterval?: Duration | false
   transport: null | { driver: TransportFactory; channel?: string }
-  routeHandlerDomain?: string
+  routeHandlerModifier?: (route: Route) => void
 }
