@@ -33,12 +33,13 @@ export default class TransmitProvider {
   async boot() {
     const router = await this.app.container.make('router')
     const transmit = await this.app.container.make('transmit')
+    const config = this.app.config.get<TransmitConfig>('transmit', {})
 
-    router.get('__transmit/events', (ctx) => {
+    const registerRoute = router.get('__transmit/events', (ctx) => {
       transmit.$createStream(ctx)
     })
 
-    router.post('__transmit/subscribe', async (ctx) => {
+    const subscribeRoute = router.post('__transmit/subscribe', async (ctx) => {
       const uid = ctx.request.input('uid')
       const channel = ctx.request.input('channel')
 
@@ -51,7 +52,7 @@ export default class TransmitProvider {
       return ctx.response.noContent()
     })
 
-    router.post('__transmit/unsubscribe', (ctx) => {
+    const unsubscribeRoute = router.post('__transmit/unsubscribe', (ctx) => {
       const uid = ctx.request.input('uid')
       const channel = ctx.request.input('channel')
 
@@ -63,6 +64,12 @@ export default class TransmitProvider {
 
       return ctx.response.noContent()
     })
+
+    if (config.routeHandlerDomain) {
+      registerRoute.domain(config.routeHandlerDomain)
+      subscribeRoute.domain(config.routeHandlerDomain)
+      unsubscribeRoute.domain(config.routeHandlerDomain)
+    }
   }
 
   async shutdown() {

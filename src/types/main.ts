@@ -26,4 +26,5 @@ export type Broadcastable = { [key: string]: Broadcastable } | string | number |
 export interface TransmitConfig {
   pingInterval?: Duration | false
   transport: null | { driver: TransportFactory; channel?: string }
+  routeHandlerDomain?: string
 }
