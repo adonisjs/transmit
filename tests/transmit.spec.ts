@@ -9,7 +9,7 @@
 
 import { randomUUID } from 'node:crypto'
 import { test } from '@japa/runner'
-import { memory } from '@rlanz/bus/drivers/memory'
+import { memory } from '@boringnode/bus/transports/memory'
 import { HttpContextFactory } from '@adonisjs/core/factories/http'
 import { Transmit } from '../src/transmit.js'
 import { TransportMessageType } from '../src/transport_message_type.js'

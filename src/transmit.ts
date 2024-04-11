@@ -9,14 +9,14 @@
 
 import { clearInterval } from 'node:timers'
 import Emittery from 'emittery'
-import { Bus } from '@rlanz/bus'
+import { Bus } from '@boringnode/bus'
 import string from '@poppinss/utils/string'
 import { Stream } from './stream.js'
 import { StreamChannelRepository } from './stream_channel_repository.js'
 import { SecureChannelStore } from './secure_channel_store.js'
 import { TransportMessageType } from './transport_message_type.js'
 import type { HttpContext } from '@adonisjs/core/http'
-import type { Transport } from '@rlanz/bus/types/main'
+import type { Transport } from '@boringnode/bus/types/main'
 import type { Broadcastable, TransmitConfig } from './types/main.js'
 
 interface TransmitLifecycleHooks {

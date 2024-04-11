@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import type { TransportFactory } from '@rlanz/bus/types/main'
+import type { TransportFactory } from '@boringnode/bus/types/main'
 import type { Route } from '@adonisjs/core/http'
 
 /**

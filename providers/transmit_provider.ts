@@ -11,7 +11,7 @@ import '../src/types/extended.js'
 import { Transmit } from '../src/transmit.js'
 import type { ApplicationService } from '@adonisjs/core/types'
 import type { TransmitConfig } from '../src/types/main.js'
-import type { Transport } from '@rlanz/bus/types/main'
+import type { Transport } from '@boringnode/bus/types/main'
 
 export default class TransmitProvider {
   constructor(protected app: ApplicationService) {}
