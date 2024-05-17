@@ -195,7 +195,8 @@ export class Transmit {
       payload: { uid },
     })
 
-    return this.#storage.addChannelToStream(uid, channel)
+    this.#storage.addChannelToStream(uid, channel)
+    return true
   }
 
   $unsubscribeFromChannel(uid: string, channel: string, ctx: HttpContext): boolean {
@@ -207,7 +208,8 @@ export class Transmit {
       payload: { uid },
     })
 
-    return this.#storage.removeChannelFromStream(uid, channel)
+    this.#storage.removeChannelFromStream(uid, channel)
+    return true
   }
 
   #ping() {
