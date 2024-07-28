@@ -18,6 +18,7 @@
     ".": "./build/index.js",
     "./transports": "./build/transports.js",
     "./transmit_provider": "./build/providers/transmit_provider.js",
+    "./controllers/*": "./build/controllers/*.js",
     "./services/main": "./build/services/transmit.js",
     "./types": "./build/src/types/main.js"
   },
@@ -39,10 +40,7 @@
     "version": "npm run build"
   },
   "dependencies": {
-    "@boringnode/bus": "^0.5.0",
-    "@poppinss/matchit": "^3.1.2",
-    "@poppinss/utils": "^6.7.2",
-    "emittery": "^1.0.3"
+    "@boringnode/transmit": "^0.1.1"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.2.3",
@@ -50,6 +48,7 @@
     "@adonisjs/eslint-config": "^1.3.0",
     "@adonisjs/prettier-config": "^1.3.0",
     "@adonisjs/tsconfig": "^1.3.0",
+    "@boringnode/bus": "^0.6.0",
     "@japa/assert": "2.1.0",
     "@japa/runner": "3.1.1",
     "@swc/core": "1.4.11",

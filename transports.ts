@@ -7,4 +7,4 @@
  * file that was distributed with this source code.
  */
 
-export { redis } from '@boringnode/bus/transports/redis'
+export * from '@boringnode/transmit/transports'

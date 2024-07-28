@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-import { Transmit } from '../transmit.js'
+import { TransmitAdonisAdapter } from '../transmit.js'
 
 declare module '@adonisjs/core/types' {
   export interface ContainerBindings {
-    transmit: Transmit
+    transmit: TransmitAdonisAdapter
   }
 }

@@ -8,9 +8,9 @@
  */
 
 import app from '@adonisjs/core/services/app'
-import { Transmit } from '../src/transmit.js'
+import { TransmitAdonisAdapter } from '../src/transmit.js'
 
-let transmit: Transmit
+let transmit: TransmitAdonisAdapter
 
 await app.booted(async () => {
   transmit = await app.container.make('transmit')
