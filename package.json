@@ -18,7 +18,7 @@
     ".": "./build/index.js",
     "./transports": "./build/transports.js",
     "./transmit_provider": "./build/providers/transmit_provider.js",
-    "./controllers/*": "./build/controllers/*.js",
+    "./controllers/*": "./build/src/controllers/*.js",
     "./services/main": "./build/services/transmit.js",
     "./types": "./build/src/types/main.js"
   },
