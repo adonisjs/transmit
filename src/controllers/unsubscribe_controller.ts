@@ -25,6 +25,6 @@ export default class UnsubscribeController {
       return ctx.response.badRequest()
     }
 
-    return ctx.response.noContent
+    return ctx.response.noContent()
   }
 }
