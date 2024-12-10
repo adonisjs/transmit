@@ -54,6 +54,8 @@ Here are a few things you should know before using this module.
 - [Syncing](#syncing)
 - [Ping](#ping)
 - [Events](#events)
+- [Avoiding GZip Interference](#avoiding-gzip-interference)
+
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -172,6 +174,21 @@ transmit.on('unsubscribe', ({ uid, channel }) => {
   console.log(`Unsubscribed ${uid} from ${channel}`)
 })
 ```
+
+# Avoiding GZip Interference
+
+When deploying applications that use `@adonisjs/transmit`, it’s important to ensure that GZip compression does not interfere with the `text/event-stream` content type used by Server-Sent Events (SSE). Compression applied to `text/event-stream` can cause connection issues, leading to frequent disconnects or SSE failures.
+
+If your deployment uses a reverse proxy (such as Traefik or Nginx) or other middleware that applies GZip, ensure that compression is disabled for the `text/event-stream` content type.
+
+## Example Configuration for Traefik
+
+```plaintext
+traefik.http.middlewares.gzip.compress=true
+traefik.http.middlewares.gzip.compress.excludedcontenttypes=text/event-stream
+traefik.http.routers.my-router.middlewares=gzip
+```
+
 
 [gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/transmit/test.yml?branch=main&style=for-the-badge
 [gh-workflow-url]: https://github.com/adonisjs/transmit/actions/workflows/test.yml 'GitHub action'
