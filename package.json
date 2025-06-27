@@ -40,7 +40,7 @@
     "version": "npm run build"
   },
   "dependencies": {
-    "@boringnode/transmit": "^0.2.1"
+    "@boringnode/transmit": "^0.3.0"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
@@ -48,7 +48,7 @@
     "@adonisjs/eslint-config": "^1.3.0",
     "@adonisjs/prettier-config": "^1.4.0",
     "@adonisjs/tsconfig": "^1.4.0",
-    "@boringnode/bus": "^0.6.0",
+    "@boringnode/bus": "^0.7.1",
     "@japa/assert": "2.1.0",
     "@japa/runner": "3.1.1",
     "@swc/core": "1.4.11",
