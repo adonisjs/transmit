@@ -190,7 +190,7 @@ traefik.http.routers.my-router.middlewares=gzip
 ```
 
 
-[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/transmit/test.yml?branch=main&style=for-the-badge
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/transmit/test.yml?branch=2.x&style=for-the-badge
 [gh-workflow-url]: https://github.com/adonisjs/transmit/actions/workflows/test.yml 'GitHub action'
 [npm-image]: https://img.shields.io/npm/v/@adonisjs/transmit.svg?style=for-the-badge&logo=npm
 [npm-url]: https://www.npmjs.com/package/@adonisjs/transmit
