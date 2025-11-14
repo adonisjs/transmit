@@ -154,24 +154,32 @@ export default defineConfig({
 Transmit uses [Emittery](https://github.com/sindresorhus/emittery) to emit any lifecycle events. You can listen for events using the `on` method.
 
 ```ts
+transmit.on('broadcast', ({ channel, payload }) => {
+  logger.debug('TRANSMIT broadcasted')
+  logger.debug(`─ channel: ${channel}`)
+  logger.debug(`─ payload: ${JSON.stringify(payload)}`)
+})
+
 transmit.on('connect', ({ uid }) => {
-  console.log(`Connected: ${uid}`)
+  logger.debug('TRANSMIT connected')
+  logger.debug(`─ uid: ${uid}`)
 })
 
 transmit.on('disconnect', ({ uid }) => {
-  console.log(`Disconnected: ${uid}`)
+  logger.debug('TRANSMIT disconnected')
+  logger.debug(`─ uid: ${uid}`)
 })
 
-transmit.on('broadcast', ({ channel }) => {
-  console.log(`Broadcasted to channel ${channel}`)
+transmit.on('subscribe', ({ channel, uid }) => {
+  logger.debug('TRANSMIT subscribed')
+  logger.debug(`─ channel: ${channel}`)
+  logger.debug(`─ uid: ${uid}`)
 })
 
-transmit.on('subscribe', ({ uid, channel }) => {
-  console.log(`Subscribed ${uid} to ${channel}`)
-})
-
-transmit.on('unsubscribe', ({ uid, channel }) => {
-  console.log(`Unsubscribed ${uid} from ${channel}`)
+transmit.on('unsubscribe', ({ channel, uid }) => {
+  logger.debug('TRANSMIT unsubscribed')
+  logger.debug(`─ channel: ${channel}`)
+  logger.debug(`─ uid: ${uid}`)
 })
 ```
 
