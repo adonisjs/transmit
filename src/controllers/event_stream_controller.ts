@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { RuntimeException } from '@poppinss/utils'
+import { RuntimeException } from '@adonisjs/core/exceptions'
 import transmit from '../../services/transmit.js'
 import type { HttpContext } from '@adonisjs/core/http'
 
