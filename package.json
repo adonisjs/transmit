@@ -40,7 +40,7 @@
     "version": "npm run build"
   },
   "dependencies": {
-    "@boringnode/transmit": "^0.3.0"
+    "@boringnode/transmit": "^0.4.0"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^8.0.0-next.31",
