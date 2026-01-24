@@ -1,17 +1,16 @@
-name: checks
+name: CI
+
 on:
   - push
   - pull_request
   - workflow_call
 
 jobs:
-  test:
-    uses: adonisjs/.github/.github/workflows/test.yml@7.x
-    with:
-      disable-windows: true
-
   lint:
     uses: adonisjs/.github/.github/workflows/lint.yml@next
 
   typecheck:
     uses: adonisjs/.github/.github/workflows/typecheck.yml@next
+
+  tests:
+    uses: adonisjs/.github/.github/workflows/test.yml@next
