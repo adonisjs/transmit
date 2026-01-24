@@ -46,16 +46,15 @@ Here are a few things you should know before using this module.
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Channels](#channels)
-    - [Channel Names](#channel-names)
-    - [Channel Authorization](#channel-authorization)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Channels](#channels)
+  - [Channel Names](#channel-names)
+  - [Channel Authorization](#channel-authorization)
 - [Syncing](#syncing)
 - [Ping](#ping)
 - [Events](#events)
 - [Avoiding GZip Interference](#avoiding-gzip-interference)
-
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -127,8 +126,8 @@ export default defineConfig({
       host: env.get('REDIS_HOST'),
       port: env.get('REDIS_PORT'),
       password: env.get('REDIS_PASSWORD'),
-    })
-  }
+    }),
+  },
 })
 ```
 
@@ -196,7 +195,6 @@ traefik.http.middlewares.gzip.compress=true
 traefik.http.middlewares.gzip.compress.excludedcontenttypes=text/event-stream
 traefik.http.routers.my-router.middlewares=gzip
 ```
-
 
 [gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/transmit/checks.yml?branch=3.x&style=for-the-badge
 [gh-workflow-url]: https://github.com/adonisjs/transmit/actions/workflows/checks.yml 'GitHub action'
