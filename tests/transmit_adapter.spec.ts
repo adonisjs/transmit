@@ -42,6 +42,7 @@ test.group('TransmitAdonisAdapter', () => {
 
     const modified: Array<{ path: string; method: string; modified?: boolean }> = []
     adapter.registerRoutes((route) => {
+      // @ts-expect-error - Adding test property
       route.modified = true
       modified.push(route as any)
     })
