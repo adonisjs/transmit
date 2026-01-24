@@ -8,7 +8,7 @@
  */
 
 import app from '@adonisjs/core/services/app'
-import { TransmitAdonisAdapter } from '../src/transmit.js'
+import type { TransmitAdonisAdapter } from '../src/transmit.js'
 
 let transmit: TransmitAdonisAdapter
 

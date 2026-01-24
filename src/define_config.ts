@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { TransmitConfig } from '@boringnode/transmit/types'
+import type { TransmitConfig } from '@boringnode/transmit/types'
 
 export function defineConfig<T extends TransmitConfig>(config: T): T {
   if (config.transport && typeof config.transport.channel === 'undefined') {
