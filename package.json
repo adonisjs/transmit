@@ -10,6 +10,7 @@
   "files": [
     "src",
     "providers",
+    "transports",
     "index.ts",
     "configure.ts",
     "build"
@@ -17,6 +18,8 @@
   "exports": {
     ".": "./build/index.js",
     "./transports": "./build/transports.js",
+    "./transports/redis": "./build/transports/redis.js",
+    "./transports/mqtt": "./build/transports/mqtt.js",
     "./transmit_provider": "./build/providers/transmit_provider.js",
     "./controllers/*": "./build/src/controllers/*.js",
     "./services/main": "./build/services/transmit.js",
