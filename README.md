@@ -51,9 +51,11 @@ Here are a few things you should know before using this module.
 - [Channels](#channels)
   - [Channel Names](#channel-names)
   - [Channel Authorization](#channel-authorization)
+- [Client](#client)
 - [Syncing](#syncing)
 - [Ping](#ping)
 - [Events](#events)
+- [Testing](#testing)
 - [Avoiding GZip Interference](#avoiding-gzip-interference)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -109,6 +111,64 @@ transmit.authorize<{ id: string }>('users/:id', (ctx: HttpContext, { id }) => {
 > Do not forget to add your `start/transmit.ts` file inside the `preloads` array of the `adonisrc.ts` file.
 
 When a client tries to subscribe to a private channel, the callback function is invoked with the channel params and the HTTP context. The callback function must return a boolean value to allow or disallow the subscription.
+
+The `ctx` passed to the callback only carries an authenticated user when the subscription request goes through your authentication middleware. By default, the routes used to subscribe and unsubscribe (`__transmit/subscribe` and `__transmit/unsubscribe`) are public, so `ctx.auth.user` is `undefined`. Use `transmit.registerRoutes` to protect them:
+
+```ts
+// start/routes.ts
+
+import transmit from '@adonisjs/transmit/services/main'
+import { middleware } from '#start/kernel'
+
+transmit.registerRoutes((route) => {
+  // Authenticate the client before it can subscribe to a channel
+  if (route.getPattern() === '__transmit/subscribe') {
+    route.middleware(middleware.auth())
+    return
+  }
+})
+```
+
+> [!NOTE]
+> Once the subscribe route is authenticated, `ctx.auth.user` is available inside your `authorize` callbacks, allowing you to scope private channels to the current user.
+
+## Client
+
+The `@adonisjs/transmit-client` package lets you connect to the server, subscribe to channels and react to incoming messages.
+
+```sh
+npm i @adonisjs/transmit-client
+```
+
+Create a client by pointing it to your server. When your subscribe route is authenticated (see [Channel Authorization](#channel-authorization)), use the `beforeSubscribe` hook to attach your credentials to every subscription request. The hook receives the outgoing `Request`, so you can mutate its headers directly.
+
+```ts
+import { Transmit } from '@adonisjs/transmit-client'
+
+export const transmit = new Transmit({
+  baseUrl: window.location.origin,
+  beforeSubscribe: (request) => {
+    request.headers.set('Authorization', `Bearer ${getToken()}`)
+  },
+})
+```
+
+Then subscribe to a channel and listen for messages:
+
+```ts
+const subscription = transmit.subscription('users/1')
+await subscription.create()
+
+subscription.onMessage((message) => {
+  console.log(message)
+})
+
+// Stop receiving messages
+await subscription.delete()
+```
+
+> [!NOTE]
+> If you also protect the unsubscribe route, use the matching `beforeUnsubscribe` hook to authenticate `__transmit/unsubscribe` requests the same way.
 
 # Syncing
 
@@ -179,6 +239,38 @@ transmit.on('unsubscribe', ({ channel, uid }) => {
   logger.debug('TRANSMIT unsubscribed')
   logger.debug(`─ channel: ${channel}`)
   logger.debug(`─ uid: ${uid}`)
+})
+```
+
+The `connect` and `disconnect` events expose the `uid` of the client. Combined with [Channel Authorization](#channel-authorization), you can map this `uid` to the authenticated user to keep track of who is currently connected.
+
+# Testing
+
+Because `transmit.on` returns a function to stop listening, you can collect the broadcasts emitted while hitting your endpoints and assert on them. The following example uses [Japa](https://japa.dev) with the `@japa/api-client` plugin:
+
+```ts
+import transmit from '@adonisjs/transmit/services/main'
+import { test } from '@japa/runner'
+
+test.group('Posts', () => {
+  test('it broadcasts the created post', async ({ client, assert }) => {
+    const broadcasts: { channel: string; payload: unknown }[] = []
+    const stopListening = transmit.on('broadcast', (event) => broadcasts.push(event))
+
+    const response = await client.post('/posts').loginAs(user)
+
+    stopListening()
+
+    assert.equal(response.status(), 201)
+    assert.lengthOf(broadcasts, 1)
+    assert.equal(broadcasts[0].channel, `users/${user.id}`)
+  })
+
+  test('it rejects an unauthenticated subscription', async ({ client, assert }) => {
+    const response = await client.post('/__transmit/subscribe').json({ channel: 'users/1' })
+
+    assert.equal(response.status(), 401)
+  })
 })
 ```
 
