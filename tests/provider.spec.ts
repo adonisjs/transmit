@@ -42,6 +42,50 @@ test.group('Provider', () => {
     assert.equal(driverCalls, 1)
   })
 
+  test('should not start the ping interval in warmup mode', async ({ assert }) => {
+    const app = await setupApp('console', {
+      transmit: defineConfig({
+        pingInterval: '30s',
+        transport: null,
+      }),
+    })
+    app.getMode = () => 'warmup'
+    const timersBefore = process
+      .getActiveResourcesInfo()
+      .filter((resource) => resource === 'Timeout')
+
+    const transmit = await app.container.make('transmit')
+    transmit.authorize('/channels/:id', () => true)
+
+    const timersAfter = process
+      .getActiveResourcesInfo()
+      .filter((resource) => resource === 'Timeout')
+    assert.lengthOf(timersAfter, timersBefore.length)
+
+    await app.terminate()
+  })
+
+  test('should start the configured ping interval in run mode', async ({ assert }) => {
+    const app = await setupApp('web', {
+      transmit: defineConfig({
+        pingInterval: '30s',
+        transport: null,
+      }),
+    })
+    const timersBefore = process
+      .getActiveResourcesInfo()
+      .filter((resource) => resource === 'Timeout')
+
+    await app.container.make('transmit')
+
+    const timersAfter = process
+      .getActiveResourcesInfo()
+      .filter((resource) => resource === 'Timeout')
+    assert.lengthOf(timersAfter, timersBefore.length + 1)
+
+    await app.terminate()
+  })
+
   test('should call shutdown on provider shutdown', async ({ assert }) => {
     const app = await setupApp()
     const transmit = await app.container.make('transmit')

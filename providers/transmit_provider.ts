@@ -20,6 +20,8 @@ export default class TransmitProvider {
     this.app.container.singleton('transmit', async () => {
       const router = await this.app.container.make('router')
       const config = this.app.config.get<TransmitConfig>('transmit', {})
+      const transmitConfig: TransmitConfig =
+        this.app.getMode() === 'warmup' ? { ...config, pingInterval: false } : config
 
       let transport: Transport | null = null
 
@@ -27,7 +29,7 @@ export default class TransmitProvider {
         transport = config.transport.driver()
       }
 
-      return new TransmitAdonisAdapter(config, router, transport)
+      return new TransmitAdonisAdapter(transmitConfig, router, transport)
     })
   }
 
