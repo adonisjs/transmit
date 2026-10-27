@@ -42,6 +42,30 @@ test.group('Provider', () => {
     assert.equal(driverCalls, 1)
   })
 
+  test('should not call transport driver in warmup mode', async ({ assert }) => {
+    let driverCalls = 0
+
+    const app = await setupApp('console', {
+      transmit: defineConfig({
+        pingInterval: false,
+        transport: {
+          driver: () => {
+            driverCalls++
+            return null
+          },
+        } as any,
+      }),
+    })
+    app.getMode = () => 'warmup'
+
+    const transmit = await app.container.make('transmit')
+    transmit.authorize('/channels/:id', () => true)
+
+    assert.equal(driverCalls, 0)
+
+    await app.terminate()
+  })
+
   test('should not start the ping interval in warmup mode', async ({ assert }) => {
     const app = await setupApp('console', {
       transmit: defineConfig({
